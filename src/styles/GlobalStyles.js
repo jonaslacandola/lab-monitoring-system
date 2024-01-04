@@ -24,7 +24,18 @@ const GlobalStyles = createGlobalStyle`
         --yellow-400: #facc15;
 
         /* Blue */
+        --blue-100: #dbeafe;
+        --blue-200: #bfdbfe;
+        --blue-300: #93c5fd;
+        --blue-400: #60a5fa;
         --blue-500: #3b82f6;
+
+        /* Sky */
+        --sky-100: #e0f2fe;
+        --sky-200: #bae6fd;
+        --sky-300: #7dd3fc;
+        --sky-400: #38bdf8;
+        --sky-500: #0ea5e9;
 
         /* Green */
         --lime-400: #a3e635;
