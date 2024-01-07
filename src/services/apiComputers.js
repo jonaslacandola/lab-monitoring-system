@@ -60,7 +60,8 @@ export async function updateAllUnavailable() {
   const { error } = await supabase
     .from("computers")
     .update({ computerStatus: "available" })
-    .eq("computerStatus", "unavailable");
+    .eq("computerStatus", "unavailable")
+    .eq("computerDamage", "");
 
   if (error) {
     console.error(error.message);
@@ -81,6 +82,14 @@ export async function deleteComputerById(Id) {
 }
 
 export async function createComputer(newComputer) {
+  const { data } = await supabase
+    .from("computers")
+    .select()
+    .eq("location", newComputer.location)
+    .eq("computer", newComputer.computer);
+
+  if (data.length) throw new Error("Computer already exists.");
+
   const { error } = await supabase.from("computers").insert([newComputer]);
 
   if (error) {

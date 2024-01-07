@@ -68,7 +68,9 @@ function ComputerRow({ computer }) {
           <span>{computerName}</span>
           <span>{laboratoryName}</span>
           <Status status={computerStatus}>• {computerStatus}</Status>
-          <span>{computerDamage ? computerDamage : "--"}</span>
+          <span>
+            <i>{computerDamage ? computerDamage : "--"}</i>
+          </span>
 
           <PopOver.Container>
             <PopOver.Toggle Id={computerId}>
@@ -78,11 +80,10 @@ function ComputerRow({ computer }) {
             </PopOver.Toggle>
 
             <PopOver.Window Id={computerId}>
-              <Modal.Open>
+              <Modal.Open window={"computers"}>
                 <PopOver.PopButton
                   color={"var(--blue-500)"}
                   onEvent={handleUpdateQuery}
-                  window={"computers"}
                 >
                   <HiOutlinePencil />
                   <span>Update</span>

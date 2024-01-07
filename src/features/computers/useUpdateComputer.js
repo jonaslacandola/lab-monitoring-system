@@ -9,7 +9,5 @@ export function useUpdateComputer() {
     onError: (error) => toast.error(error.message),
   });
 
-  console.log(isUpdatingStatus);
-
   return { isUpdatingStatus, updateStatus };
 }

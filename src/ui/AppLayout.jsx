@@ -1,7 +1,8 @@
 import { Outlet } from "react-router-dom";
+import styled from "styled-components";
+
 import Sidebar from "./Sidebar";
 import Header from "./Header";
-import styled from "styled-components";
 
 const StyledAppLayout = styled.div`
   height: 100dvh;
@@ -14,7 +15,7 @@ const StyledAppLayout = styled.div`
 const Main = styled.main`
   background-color: var(--gray-50);
   padding: 4rem 4.8rem 6.4rem;
-  overflow: scroll;
+  overflow-y: scroll;
 `;
 
 const Container = styled.div`

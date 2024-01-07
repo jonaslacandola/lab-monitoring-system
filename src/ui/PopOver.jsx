@@ -72,13 +72,13 @@ function Toggle({ Id, children }) {
   return cloneElement(children, { onClick: handleToggle });
 }
 
-function PopButton({ children, color, onEvent, onOpenModal, window }) {
+function PopButton({ children, color, onEvent, onClick }) {
   const { close } = useContext(PopOverContext);
 
   function handleClick() {
     close();
     onEvent?.();
-    onOpenModal?.(window);
+    onClick?.();
   }
 
   return (

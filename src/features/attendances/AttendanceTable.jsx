@@ -9,7 +9,7 @@ function AttendanceTable({ filteredAttendances = [] }) {
     useAttendancesByCurrentDate();
 
   return (
-    <Table>
+    <Table columns={"1fr 1.8fr 1.5fr 1.2fr 1.1fr 1fr 1.1fr .9fr"}>
       <Table.Header>
         <span>Student Id</span>
         <span>Name</span>
@@ -18,6 +18,7 @@ function AttendanceTable({ filteredAttendances = [] }) {
         <span>Computer</span>
         <span>Time in</span>
         <span>Time out</span>
+        <span>Date</span>
       </Table.Header>
 
       {isLoadingCurrentAttendances && (

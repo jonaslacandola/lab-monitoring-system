@@ -79,7 +79,13 @@ function CreateComputerForm({ onCloseModal }) {
   function onSubmit(data) {
     if (computerId) {
       update(
-        { ...data, computerId },
+        {
+          ...data,
+          computerId,
+          computerStatus: data.computerDamage
+            ? "unavailable"
+            : data.computerStatus,
+        },
         {
           onSuccess: () => {
             onCloseModal?.();
@@ -131,11 +137,13 @@ function CreateComputerForm({ onCloseModal }) {
         </InputBox>
         <InputBox>
           <label>Status</label>
-          <Input
-            type="text"
-            {...register("computerStatus")}
-            disabled={!status}
-          />
+          <Select {...register("computerStatus")} disabled={!status}>
+            <option value="" hidden>
+              Select location from option
+            </option>
+            <option value="available">available</option>
+            <option value="unavailable">unavailable</option>
+          </Select>
         </InputBox>
         <InputBox>
           <label>Damage</label>

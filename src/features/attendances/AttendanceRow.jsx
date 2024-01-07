@@ -14,7 +14,8 @@ function formatTime(timeString) {
 }
 
 function AttendanceRow({ attendance }) {
-  const { students, laboratories, computers, timeIn, timeOut } = attendance;
+  const { students, laboratories, computers, timeIn, timeOut, createdAt } =
+    attendance;
   const { studentId, studentName, yearAndSection } = students;
   const { laboratoryName } = laboratories;
   const { computer } = computers ? computers : {};
@@ -31,6 +32,7 @@ function AttendanceRow({ attendance }) {
       <span>{computer ? computer : "-"}</span>
       <span>{formattedTimeIn}</span>
       <span>{formattedTimeOut}</span>
+      <span>{createdAt}</span>
     </Table.Row>
   );
 }
