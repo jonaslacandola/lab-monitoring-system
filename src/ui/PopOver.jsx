@@ -19,11 +19,11 @@ const StyledWindow = styled.div`
   display: flex;
   flex-direction: column;
 
-  padding: 1rem;
+  padding: 10px 14px;
   background-color: white;
   border: 1px solid var(--slate-200);
   border-radius: 8px;
-  gap: 1rem;
+  gap: 8px;
   width: fit-content;
 
   position: absolute;
@@ -36,13 +36,12 @@ const StyledButton = styled(Button)`
   transition: all ease-in-out 300ms;
 
   & span {
-    color: ${(props) => props.color};
+    color: var(--gray-600);
     font-size: 14px;
   }
   & svg {
-    color: ${(props) => props.color};
-    margin-right: 4px;
-    font-size: 20px;
+    color: var(--gray-600);
+    font-size: 18px;
   }
   &:hover {
     background-color: var(--slate-50);
@@ -72,7 +71,7 @@ function Toggle({ Id, children }) {
   return cloneElement(children, { onClick: handleToggle });
 }
 
-function PopButton({ children, color, onEvent, onClick }) {
+function PopButton({ children, onEvent, onClick }) {
   const { close } = useContext(PopOverContext);
 
   function handleClick() {
@@ -82,7 +81,7 @@ function PopButton({ children, color, onEvent, onClick }) {
   }
 
   return (
-    <StyledButton type="icon" color={color} onClick={handleClick}>
+    <StyledButton type="icon" onClick={handleClick}>
       {children}
     </StyledButton>
   );

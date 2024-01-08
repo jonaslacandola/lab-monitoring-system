@@ -28,8 +28,6 @@ export async function createNewLaboratory(newLaboratory) {
     throw new Error("Unable to create new computer, please try again later.");
   }
 
-  console.log(data.at(0));
-
   const newComputers = [];
   for (let count = 0; count < newLaboratory.totalComputers; count++) {
     newComputers.push({
@@ -51,4 +49,26 @@ export async function createNewLaboratory(newLaboratory) {
       .delete()
       .eq("location", data.at(0).laboratoryId);
   }
+}
+
+export async function deleteLaboratoryById(labId) {
+  const { error } = await supabase
+    .from("laboratories")
+    .delete()
+    .eq("laboratoryId", labId);
+
+  if (error) {
+    console.error(error.message);
+    throw new Error("Unable to delete laboratory, please try again later.");
+  }
+
+  // const { error: computerError } = await supabase
+  //   .from("computers")
+  //   .delete()
+  //   .eq("location", labId);
+
+  // if (computerError) {
+  //   console.error(computerError.message);
+  //   throw new Error("Unable to delete computers inside laboratory.");
+  // }
 }

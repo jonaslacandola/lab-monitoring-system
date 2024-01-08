@@ -34,12 +34,19 @@ const InputBox = styled(InputContainer)`
   }
 `;
 
-function CreateLaboratoryForm() {
+function CreateLaboratoryForm({ onCloseModal }) {
   const { isCreating, create } = useCreateLaboratory();
   const { register, handleSubmit } = useForm();
 
   function onSubmit(data) {
-    create({ ...data });
+    create(
+      { ...data },
+      {
+        onSuccess: () => {
+          onCloseModal?.();
+        },
+      }
+    );
   }
 
   return (

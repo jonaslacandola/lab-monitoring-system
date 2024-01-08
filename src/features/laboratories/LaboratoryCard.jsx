@@ -1,15 +1,14 @@
 import styled, { css } from "styled-components";
-import {
-  HiOutlineEllipsisVertical,
-  HiOutlinePencil,
-  HiOutlineTrash,
-} from "react-icons/hi2";
+import { HiOutlineEllipsisVertical, HiPencil, HiTrash } from "react-icons/hi2";
 
 import PopOver from "../../ui/PopOver";
 import Modal from "../../ui/Modal";
 import Button from "../../ui/Button";
 
 import Picture from "../../data/IMG_1052.png";
+import ConfirmDelete from "../../ui/ConfirmDelete";
+import { useDeleteLaboratory } from "./useDeleteLaboratory";
+import Spinner from "../../ui/Spinner";
 
 const LabCard = styled.div`
   background-color: white;
@@ -75,6 +74,18 @@ const Container = styled.div`
   align-items: center;
 `;
 
+const Warning = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--yellow-400);
+  margin-bottom: 1rem;
+
+  & svg {
+    font-size: 2rem;
+  }
+`;
+
 function LaboratoryCard({ laboratory }) {
   const {
     laboratoryId,
@@ -83,44 +94,58 @@ function LaboratoryCard({ laboratory }) {
     totalComputers,
     laboratoryDescription,
   } = laboratory;
+  const { deleteLaboratory, isDeleting } = useDeleteLaboratory();
+
+  function handleDelete() {
+    deleteLaboratory(laboratoryId);
+  }
 
   return (
-    <LabCard>
-      <img src={Picture} />
-      <Body>
-        <Container>
-          <Title>{laboratoryName}</Title>
+    <>
+      {isDeleting && <Spinner />}
+      <LabCard>
+        <img src={Picture} />
+        <Body>
           <Container>
-            <Status type={laboratoryStatus}>{laboratoryStatus}</Status>
-            <PopOver.Container>
-              <PopOver.Toggle Id={laboratoryId}>
-                <Button type="icon">
-                  <HiOutlineEllipsisVertical />
-                </Button>
-              </PopOver.Toggle>
-              <PopOver.Window Id={laboratoryId}>
-                <Modal.Open window={"addLabForm"}>
-                  <PopOver.PopButton>
-                    <HiOutlinePencil />
-                    <span>Update</span>
-                  </PopOver.PopButton>
-                </Modal.Open>
-                <PopOver.PopButton>
-                  <HiOutlineTrash />
-                  <span>Delete</span>
-                </PopOver.PopButton>
-              </PopOver.Window>
-            </PopOver.Container>
+            <Title>{laboratoryName}</Title>
+            <Container>
+              <Status type={laboratoryStatus}>{laboratoryStatus}</Status>
+              <PopOver.Container>
+                <PopOver.Toggle Id={laboratoryId}>
+                  <Button type="icon">
+                    <HiOutlineEllipsisVertical />
+                  </Button>
+                </PopOver.Toggle>
+                <PopOver.Window Id={laboratoryId}>
+                  <Modal.Open window={"addLabForm"}>
+                    <PopOver.PopButton>
+                      <HiPencil />
+                      <span>Update</span>
+                    </PopOver.PopButton>
+                  </Modal.Open>
+                  <Modal.Open window={laboratoryId}>
+                    <PopOver.PopButton>
+                      <HiTrash />
+                      <span>Delete</span>
+                    </PopOver.PopButton>
+                  </Modal.Open>
+                </PopOver.Window>
+              </PopOver.Container>
+            </Container>
           </Container>
-        </Container>
-        <SubText>{totalComputers} computers</SubText>
-        <Description>
-          {laboratoryDescription
-            ? laboratoryDescription
-            : "Description unavailable"}
-        </Description>
-      </Body>
-    </LabCard>
+          <SubText>{totalComputers} computers</SubText>
+          <Description>{laboratoryDescription}</Description>
+        </Body>
+      </LabCard>
+      <Modal.Window name={laboratoryId}>
+        <ConfirmDelete onConfirm={handleDelete}>
+          <p>Are you sure you want to continue?</p>
+          <Warning>
+            Deletion might result to permanently loss of data and information.
+          </Warning>
+        </ConfirmDelete>
+      </Modal.Window>
+    </>
   );
 }
 

@@ -9,6 +9,7 @@ import Spinner from "../ui/Spinner";
 import Modal from "../ui/Modal";
 import CreateLaboratoryForm from "../features/laboratories/CreateLaboratoryForm";
 import Menu from "../ui/Menu";
+import EmptyPage from "../ui/EmptyPage";
 
 const StyledLaboratories = styled.div`
   width: 100%;
@@ -47,6 +48,7 @@ function Laboratories() {
         {!isLoadingLaboratories && (
           <PopOver>
             <StyledLaboratories>
+              {!laboratories.length && <EmptyPage />}
               {laboratories?.map((laboratory) => (
                 <LaboratoryCard
                   key={laboratory.laboratoryId}

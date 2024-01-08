@@ -20,6 +20,8 @@ const GlobalStyles = createGlobalStyle`
         --gray-300: #d1d5db;
         --gray-400: #9ca3af;
         --gray-500: #6b7280;
+        --gray-600: #4b5563;
+        --gray-700: #374151;
 
         /* Yellow */
         --yellow-400: #facc15;

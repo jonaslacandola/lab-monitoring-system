@@ -6,7 +6,8 @@ export function useDeleteComputerById() {
   const queryClient = useQueryClient();
   const { isPending: isDeletingComputer, mutate: deleteComputer } = useMutation(
     {
-      mutationFn: deleteComputerById,
+      mutationFn: ({ computerId, laboratories }) =>
+        deleteComputerById(computerId, laboratories),
       onSuccess: () => {
         toast.success("Computer has been successfully deleted");
         queryClient.invalidateQueries(["computers"]);

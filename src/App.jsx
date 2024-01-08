@@ -6,7 +6,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import AppLayout from "./ui/AppLayout";
 import Attendance from "./pages/Attendance";
 import Login from "./pages/Login";
-import ErrorPage from "./ui/ErrorPage";
+import PageNotFound from "./ui/PageNotFound";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import ReRouter from "./ui/ReRouter";
 import Dashboard from "./pages/Dashboard";
@@ -55,7 +55,7 @@ function App() {
             <Route index element={<Navigate replace to={"/attendance"} />} />
             <Route path="attendance" element={<Attendance />} />
             <Route path="sign-in" element={<Login />} />
-            <Route path="*" element={<ErrorPage />} />
+            <Route path="*" element={<PageNotFound />} />
           </Route>
           <Route
             path="/admin"

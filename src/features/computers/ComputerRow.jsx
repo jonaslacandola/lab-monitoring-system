@@ -1,9 +1,5 @@
 import styled, { css } from "styled-components";
-import {
-  HiOutlineEllipsisVertical,
-  HiOutlinePencil,
-  HiOutlineTrash,
-} from "react-icons/hi2";
+import { HiOutlineEllipsisVertical, HiPencil, HiTrash } from "react-icons/hi2";
 
 import PopOver from "../../ui/PopOver";
 import Button from "../../ui/Button";
@@ -41,7 +37,7 @@ function ComputerRow({ computer }) {
   const [, setSearchParams] = useSearchParams();
 
   function handleDeleteComputer() {
-    deleteComputer(computerId);
+    deleteComputer({ computerId, laboratories });
   }
 
   function handleUpdateQuery() {
@@ -81,19 +77,13 @@ function ComputerRow({ computer }) {
 
             <PopOver.Window Id={computerId}>
               <Modal.Open window={"computers"}>
-                <PopOver.PopButton
-                  color={"var(--blue-500)"}
-                  onEvent={handleUpdateQuery}
-                >
-                  <HiOutlinePencil />
+                <PopOver.PopButton onEvent={handleUpdateQuery}>
+                  <HiPencil />
                   <span>Update</span>
                 </PopOver.PopButton>
               </Modal.Open>
-              <PopOver.PopButton
-                onEvent={handleDeleteComputer}
-                color={"var(--red-500)"}
-              >
-                <HiOutlineTrash />
+              <PopOver.PopButton onEvent={handleDeleteComputer}>
+                <HiTrash />
                 <span>Remove</span>
               </PopOver.PopButton>
             </PopOver.Window>

@@ -1,0 +1,19 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteLaboratoryById } from "../../services/apiLaboratories";
+import toast from "react-hot-toast";
+
+export function useDeleteLaboratory() {
+  const queryClient = useQueryClient();
+  const { isPending: isDeleting, mutate: deleteLaboratory } = useMutation({
+    mutationFn: deleteLaboratoryById,
+    onSuccess: () => {
+      toast.success("Laboratory has been successfully deleted.");
+      queryClient.invalidateQueries(["laboratories"]);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  return { isDeleting, deleteLaboratory };
+}

@@ -2,7 +2,7 @@ import { HiArrowLeft, HiOutlineExclamationTriangle } from "react-icons/hi2";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 
-const StyledErrorPage = styled.div`
+const StyledPageNotFound = styled.div`
   width: 100%;
   height: 90%;
   display: flex;
@@ -33,19 +33,19 @@ const Button = styled.button`
   }
 `;
 
-function ErrorPage() {
+function PageNotFound() {
   const navigate = useNavigate();
 
   return (
-    <StyledErrorPage>
+    <StyledPageNotFound>
       <HiOutlineExclamationTriangle />
       <p>There seems to be a problem, page not found.</p>
       <Button onClick={() => navigate(-1)}>
         <HiArrowLeft />
         <span>Go back</span>
       </Button>
-    </StyledErrorPage>
+    </StyledPageNotFound>
   );
 }
 
-export default ErrorPage;
+export default PageNotFound;

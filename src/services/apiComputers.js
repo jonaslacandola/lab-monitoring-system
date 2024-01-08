@@ -69,7 +69,7 @@ export async function updateAllUnavailable() {
   }
 }
 
-export async function deleteComputerById(Id) {
+export async function deleteComputerById(Id, laboratory) {
   const { error } = await supabase
     .from("computers")
     .delete()
@@ -78,6 +78,15 @@ export async function deleteComputerById(Id) {
   if (error) {
     console.error(error.message);
     throw new Error("Unable to delete computer, please try again later.");
+  }
+
+  const { error: laboratoryError } = await supabase
+    .from("laboratories")
+    .upsert([{ ...laboratory, totalComputers: laboratory.totalComputers - 1 }]);
+
+  if (laboratoryError) {
+    console.error(error.message);
+    throw new Error("Unable to update laboratory.");
   }
 }
 
