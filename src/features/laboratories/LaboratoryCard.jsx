@@ -5,10 +5,11 @@ import PopOver from "../../ui/PopOver";
 import Modal from "../../ui/Modal";
 import Button from "../../ui/Button";
 
-import Picture from "../../data/IMG_1052.png";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import { useDeleteLaboratory } from "./useDeleteLaboratory";
 import Spinner from "../../ui/Spinner";
+import { useSearchParams } from "react-router-dom";
+import { useState } from "react";
 
 const LabCard = styled.div`
   background-color: white;
@@ -20,6 +21,7 @@ const LabCard = styled.div`
 
   & > img {
     width: 100%;
+    height: 216px;
     border-radius: 8px 8px 0px 0px;
     object-fit: cover;
   }
@@ -29,7 +31,6 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
-
   padding: 8px 1rem 1.4rem;
 `;
 
@@ -86,25 +87,56 @@ const Warning = styled.span`
   }
 `;
 
+const MoreLess = styled.button`
+  cursor: pointer;
+  color: var(--blue-500);
+  background-color: transparent;
+  border: none;
+  font-size: 15px;
+`;
+
 function LaboratoryCard({ laboratory }) {
+  //FIXED THIS THE STATE IS NOT WORKING
+  const [isShowMore, setIsShowMore] = useState(false);
   const {
     laboratoryId,
     laboratoryName,
     laboratoryStatus,
     totalComputers,
     laboratoryDescription,
+    imageURL,
   } = laboratory;
   const { deleteLaboratory, isDeleting } = useDeleteLaboratory();
+  const [, setSearchParams] = useSearchParams();
+  const minDescription =
+    laboratoryDescription?.split(" ").length > 14 &&
+    laboratoryDescription?.split(" ", 14).join(" ");
 
   function handleDelete() {
-    deleteLaboratory(laboratoryId);
+    deleteLaboratory({ laboratoryId, imageURL });
+  }
+
+  function handleUpdate() {
+    setSearchParams({
+      laboratory: [
+        laboratoryId,
+        laboratoryName,
+        laboratoryStatus,
+        encodeURIComponent(laboratoryDescription),
+        imageURL,
+      ],
+    });
+  }
+
+  function handleShowMore() {
+    setIsShowMore((show) => !show);
   }
 
   return (
     <>
       {isDeleting && <Spinner />}
       <LabCard>
-        <img src={Picture} />
+        <img src={imageURL} />
         <Body>
           <Container>
             <Title>{laboratoryName}</Title>
@@ -118,7 +150,7 @@ function LaboratoryCard({ laboratory }) {
                 </PopOver.Toggle>
                 <PopOver.Window Id={laboratoryId}>
                   <Modal.Open window={"addLabForm"}>
-                    <PopOver.PopButton>
+                    <PopOver.PopButton onEvent={handleUpdate}>
                       <HiPencil />
                       <span>Update</span>
                     </PopOver.PopButton>
@@ -134,7 +166,21 @@ function LaboratoryCard({ laboratory }) {
             </Container>
           </Container>
           <SubText>{totalComputers} computers</SubText>
-          <Description>{laboratoryDescription}</Description>
+          {!minDescription && (
+            <Description>{laboratoryDescription}</Description>
+          )}
+          {minDescription && !isShowMore && (
+            <Description>
+              {minDescription}...
+              <MoreLess onClick={handleShowMore}>Show more</MoreLess>
+            </Description>
+          )}
+          {isShowMore && (
+            <Description>
+              {laboratoryDescription}{" "}
+              <MoreLess onClick={handleShowMore}>Show less</MoreLess>
+            </Description>
+          )}
         </Body>
       </LabCard>
       <Modal.Window name={laboratoryId}>

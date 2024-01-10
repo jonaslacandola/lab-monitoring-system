@@ -5,7 +5,8 @@ import toast from "react-hot-toast";
 export function useDeleteLaboratory() {
   const queryClient = useQueryClient();
   const { isPending: isDeleting, mutate: deleteLaboratory } = useMutation({
-    mutationFn: deleteLaboratoryById,
+    mutationFn: ({ laboratoryId, imageURL }) =>
+      deleteLaboratoryById(laboratoryId, imageURL),
     onSuccess: () => {
       toast.success("Laboratory has been successfully deleted.");
       queryClient.invalidateQueries(["laboratories"]);

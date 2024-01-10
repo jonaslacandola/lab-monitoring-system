@@ -9,6 +9,9 @@ import Button from "../../ui/Button";
 import Spinner from "../../ui/Spinner";
 
 import { useCreateLaboratory } from "./useCreateLaboratory";
+import FileInput from "../../ui/FileInput";
+import { useSearchParams } from "react-router-dom";
+import { useUpdateLaboratoryById } from "./useUpdateLaboratoryById";
 
 const StyledForm = styled.form`
   display: flex;
@@ -36,22 +39,56 @@ const InputBox = styled(InputContainer)`
 
 function CreateLaboratoryForm({ onCloseModal }) {
   const { isCreating, create } = useCreateLaboratory();
-  const { register, handleSubmit } = useForm();
+  const { isUpdating, update } = useUpdateLaboratoryById();
+  const [searchParams] = useSearchParams();
+  const [
+    laboratoryId,
+    laboratoryName,
+    laboratoryStatus,
+    laboratoryDescription,
+    imageURL,
+  ] = searchParams.getAll("laboratory");
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      laboratoryName,
+      laboratoryStatus,
+      laboratoryDescription: laboratoryDescription
+        ? decodeURIComponent(laboratoryDescription)
+        : "",
+    },
+  });
+  const isLoading = isCreating || isUpdating;
 
   function onSubmit(data) {
-    create(
-      { ...data },
-      {
-        onSuccess: () => {
-          onCloseModal?.();
+    if (laboratoryId) {
+      update(
+        {
+          ...data,
+          prevImageURL: imageURL,
+          imageURL: data.imageURL[0],
+          laboratoryId,
         },
-      }
-    );
+        {
+          onSuccess: () => {
+            onCloseModal?.();
+          },
+        }
+      );
+    } else {
+      create(
+        { ...data, imageURL: data.imageURL[0] },
+        {
+          onSuccess: () => {
+            onCloseModal?.();
+          },
+        }
+      );
+    }
   }
 
   return (
     <>
-      {isCreating && <Spinner />}
+      {isLoading && <Spinner />}
       <StyledForm onSubmit={handleSubmit(onSubmit)}>
         <InputBox>
           <span>Name</span>
@@ -61,14 +98,16 @@ function CreateLaboratoryForm({ onCloseModal }) {
             {...register("laboratoryName", { required: true })}
           />
         </InputBox>
-        <InputBox>
-          <span>Number of Computers</span>
-          <Input
-            type="number"
-            placeholder="Total computers"
-            {...register("totalComputers", { required: true })}
-          />
-        </InputBox>
+        {!laboratoryId && (
+          <InputBox>
+            <span>Number of Computers</span>
+            <Input
+              type="number"
+              placeholder="Total computers"
+              {...register("totalComputers", { required: true })}
+            />
+          </InputBox>
+        )}
         <InputBox>
           <span>Status</span>
           <Select {...register("laboratoryStatus", { required: true })}>
@@ -78,6 +117,15 @@ function CreateLaboratoryForm({ onCloseModal }) {
             <option value="open">Open</option>
             <option value="close">Close</option>
           </Select>
+        </InputBox>
+        <InputBox>
+          <span>Image</span>
+          <FileInput
+            {...register("imageURL", {
+              required: Boolean(!laboratoryId),
+              validate: (file) => file && file[0].type.startsWith("image"),
+            })}
+          />
         </InputBox>
         <InputBox>
           <span>Description</span>

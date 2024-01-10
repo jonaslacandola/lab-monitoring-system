@@ -30,6 +30,9 @@ const StyledMenu = styled.div`
     &:hover {
       background-color: var(--gray-100);
     }
+    &:focus {
+      outline: var(--blue-500);
+    }
   }
 `;
 

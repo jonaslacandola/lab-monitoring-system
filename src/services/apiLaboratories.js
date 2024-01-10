@@ -1,4 +1,4 @@
-import supabase from "../supabase";
+import supabase, { supabaseUrl } from "../supabase";
 
 export async function getLaboratories() {
   const { data, error } = await supabase.from("laboratories").select("*");
@@ -9,6 +9,12 @@ export async function getLaboratories() {
 }
 
 export async function createNewLaboratory(newLaboratory) {
+  const imageName = `${Math.random()}-${newLaboratory.imageURL.name}`.replace(
+    "/",
+    ""
+  );
+  const imagePath = `${supabaseUrl}/storage/v1/object/public/laboratories/${imageName}`;
+
   const { data: laboratory } = await supabase
     .from("laboratories")
     .select()
@@ -20,12 +26,25 @@ export async function createNewLaboratory(newLaboratory) {
 
   const { data, error } = await supabase
     .from("laboratories")
-    .insert([newLaboratory])
+    .insert([{ ...newLaboratory, imageURL: imagePath }])
     .select();
 
   if (error) {
     console.error(error.message);
-    throw new Error("Unable to create new computer, please try again later.");
+    throw new Error("Unable to add new laboratory, please try again later.");
+  }
+
+  const { error: storageError } = supabase.storage
+    .from("laboratories")
+    .upload(imageName, newLaboratory.imageURL);
+
+  if (storageError) {
+    console.error(storageError.message);
+    await supabase
+      .from("laboratories")
+      .delete()
+      .eq("laboratoryId", data?.at(0).laboratoryId);
+    throw new Error("Unable to add new laboratory, uploading of image failed.");
   }
 
   const newComputers = [];
@@ -47,11 +66,67 @@ export async function createNewLaboratory(newLaboratory) {
     await supabase
       .from("laboratories")
       .delete()
-      .eq("location", data.at(0).laboratoryId);
+      .eq("laboratoryId", data?.at(0).laboratoryId);
+    throw new Error(
+      "Unable to add new laboratory, adding of computers failed."
+    );
   }
 }
 
-export async function deleteLaboratoryById(labId) {
+export async function updateLaboratoryById(laboratory) {
+  const imageName = `${Math.random()}-${laboratory.imageURL.name}`.replace(
+    "/",
+    ""
+  );
+  const imagePath = `${supabaseUrl}/storage/v1/object/public/laboratories/${imageName}`;
+  const { prevImageURL, ...restOfLaboratory } = laboratory;
+  const updatedLaboratory = {
+    ...restOfLaboratory,
+    imageURL: laboratory.imageURL ? imagePath : prevImageURL,
+  };
+  const relativeImagePath = prevImageURL?.replace(
+    `${supabaseUrl}/storage/v1/object/public/laboratories/`,
+    ""
+  );
+
+  const { error } = await supabase
+    .from("laboratories")
+    .update(updatedLaboratory)
+    .eq("laboratoryId", laboratory.laboratoryId);
+
+  if (error) {
+    console.error(error.message);
+    throw new Error("Unable to updated laboratory, please try again later.");
+  }
+
+  if (!laboratory.imageURL) return;
+
+  //Write code here
+  const { error: uploadError } = await supabase.storage
+    .from("laboratories")
+    .upload(imageName, laboratory.imageURL);
+
+  if (uploadError) {
+    console.error(uploadError.message);
+    throw new Error("Unable to updated new image.");
+  }
+
+  const { error: deleteError } = await supabase.storage
+    .from("laboratories")
+    .remove([relativeImagePath]);
+
+  if (deleteError) {
+    console.error(deleteError.message);
+    throw new Error("Unable to delete previous image.");
+  }
+}
+
+export async function deleteLaboratoryById(labId, imageURL) {
+  const relativeImagePath = imageURL?.replace(
+    `${supabaseUrl}/storage/v1/object/public/laboratories/`,
+    ""
+  );
+
   const { error } = await supabase
     .from("laboratories")
     .delete()
@@ -62,13 +137,12 @@ export async function deleteLaboratoryById(labId) {
     throw new Error("Unable to delete laboratory, please try again later.");
   }
 
-  // const { error: computerError } = await supabase
-  //   .from("computers")
-  //   .delete()
-  //   .eq("location", labId);
+  const { error: imageError } = await supabase.storage
+    .from("laboratories")
+    .remove([relativeImagePath]);
 
-  // if (computerError) {
-  //   console.error(computerError.message);
-  //   throw new Error("Unable to delete computers inside laboratory.");
-  // }
+  if (imageError) {
+    console.error(imageError.message);
+    throw new Error("Unable to delete image.");
+  }
 }
