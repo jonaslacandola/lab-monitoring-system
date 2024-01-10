@@ -37,13 +37,6 @@ function Computers() {
     function () {
       const sortBy = searchParams.get("sortBy");
 
-      if (!sortBy) {
-        setSortedComputers(
-          computers?.slice().sort((a, b) => a.computer - b.computer)
-        );
-        return;
-      }
-
       switch (sortBy) {
         case "ascending":
           setSortedComputers(
@@ -126,8 +119,10 @@ function Computers() {
 
           {!computers?.length && <EmptyPage />}
 
-          {sortedComputers && (
-            <ComputersTable sortedComputers={sortedComputers} />
+          {(sortedComputers?.length || computers?.length) && (
+            <ComputersTable
+              computers={sortedComputers.length ? sortedComputers : computers}
+            />
           )}
 
           <Modal.Window name={"computers"} position={"right"}>

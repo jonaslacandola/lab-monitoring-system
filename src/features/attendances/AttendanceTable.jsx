@@ -21,15 +21,17 @@ function AttendanceTable({ filteredAttendances = [] }) {
         <span>Date</span>
       </Table.Header>
 
-      {isLoadingCurrentAttendances && (
+      {isLoadingCurrentAttendances ? (
         <Table.Empty>
           <MiniSpinner />
         </Table.Empty>
-      )}
-
-      {Boolean(filteredAttendances?.length) && (
+      ) : (
         <Table.Body
-          data={filteredAttendances}
+          data={
+            !filteredAttendances.length
+              ? filteredAttendances
+              : currentAttendances
+          }
           render={(attendance) => (
             <AttendanceRow
               key={attendance.attendanceId}
@@ -38,19 +40,6 @@ function AttendanceTable({ filteredAttendances = [] }) {
           )}
         />
       )}
-
-      {!isLoadingCurrentAttendances &&
-        Boolean(!filteredAttendances?.length) && (
-          <Table.Body
-            data={currentAttendances}
-            render={(attendance) => (
-              <AttendanceRow
-                key={attendance.attendanceId}
-                attendance={attendance}
-              />
-            )}
-          />
-        )}
     </Table>
   );
 }

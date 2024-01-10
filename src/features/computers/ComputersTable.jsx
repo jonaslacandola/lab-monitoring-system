@@ -1,9 +1,18 @@
-import { useLaboratories } from "../laboratories/useLaboratories";
+import styled from "styled-components";
+import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi2";
+
 import Table from "../../ui/Table";
 import PopOver from "../../ui/PopOver";
 import ComputerRow from "./ComputerRow";
 
-function ComputersTable({ sortedComputers }) {
+import { useLaboratories } from "../laboratories/useLaboratories";
+
+const Container = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
+function ComputersTable({ computers }) {
   const { isLoadingLaboratories, laboratories } = useLaboratories();
 
   return (
@@ -22,13 +31,26 @@ function ComputersTable({ sortedComputers }) {
             </Table.Header>
 
             <Table.Body
-              data={sortedComputers || []}
+              data={computers || []}
               render={(computer) =>
                 laboratory.laboratoryId === computer.location && (
                   <ComputerRow key={computer.computerId} computer={computer} />
                 )
               }
             />
+            <Table.Footer>
+              <span>Showing N to N of N computers.</span>
+              <Container>
+                <button disabled>
+                  <HiOutlineChevronLeft />
+                  <span>Previous</span>
+                </button>
+                <button>
+                  <span>Next</span>
+                  <HiOutlineChevronRight />
+                </button>
+              </Container>
+            </Table.Footer>
           </Table>
         ))}
     </PopOver>

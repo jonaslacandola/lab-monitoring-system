@@ -6,8 +6,6 @@ const TableContext = createContext();
 const StyledTable = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--slate-200);
-  border-radius: 8px;
 `;
 
 const TableRow = styled.div`
@@ -33,15 +31,49 @@ const StyledHeader = styled(TableRow)`
   text-transform: uppercase;
 `;
 
+const StyledFooter = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--slate-800);
+  padding: 1rem 2rem;
+  color: var(--slate-50);
+  border-radius: 0 0 6px 6px;
+
+  & button {
+    display: flex;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+    color: var(--slate-50);
+    cursor: pointer;
+
+    &:disabled,
+    &:disabled svg {
+      color: var(--gray-500);
+      cursor: not-allowed;
+    }
+
+    & span {
+      font-size: 16px;
+    }
+
+    & svg {
+      color: var(--slate-50);
+      font-size: 1.5rem;
+    }
+  }
+`;
+
 const StyledRow = styled(TableRow)`
+  border-left: 1px solid var(--slate-200);
+  border-right: 1px solid var(--slate-200);
   background-color: white;
 
   &:nth-child(even) {
     background-color: var(--slate-50);
   }
-  &:last-child {
-    border-radius: 0 0 7px 7px;
-  }
+
   &:not(:last-child) {
     border-bottom: 1px solid var(--slate-200);
   }
@@ -97,6 +129,11 @@ function Body({ data, render }) {
   return <StyledBody>{data?.map(render)}</StyledBody>;
 }
 
+function Footer({ children }) {
+  return <StyledFooter>{children}</StyledFooter>;
+}
+
+Table.Footer = Footer;
 Table.Header = Header;
 Table.Body = Body;
 Table.Row = Row;
