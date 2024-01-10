@@ -72,6 +72,7 @@ function Computers() {
 
     setSearchParams({ sortBy: value });
   }
+
   return (
     <>
       {isLoading && <Spinner />}
@@ -119,7 +120,7 @@ function Computers() {
 
           {!computers?.length && <EmptyPage />}
 
-          {(sortedComputers?.length || computers?.length) && (
+          {(Boolean(sortedComputers?.length) || Boolean(computers?.length)) && (
             <ComputersTable
               computers={sortedComputers.length ? sortedComputers : computers}
             />

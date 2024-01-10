@@ -6,14 +6,38 @@ import PopOver from "../../ui/PopOver";
 import ComputerRow from "./ComputerRow";
 
 import { useLaboratories } from "../laboratories/useLaboratories";
+import { useEffect, useState } from "react";
 
 const Container = styled.div`
   display: flex;
   gap: 1rem;
 `;
 
-function ComputersTable({ computers }) {
+const maxCount = 10;
+
+function ComputersTable({ computers = [] }) {
+  const [pagination, setPagination] = useState();
+  const [previous, setPrevious] = useState(0);
+  const [next, setNext] = useState(maxCount);
   const { isLoadingLaboratories, laboratories } = useLaboratories();
+  const totalComputers = computers.length;
+
+  useEffect(
+    function () {
+      setPagination(computers?.slice(previous, next));
+    },
+    [previous, next, computers]
+  );
+
+  function onNext() {
+    setNext((next) => next + maxCount);
+    setPrevious((prev) => prev + maxCount);
+  }
+
+  function onPrevious() {
+    setNext((next) => next - maxCount);
+    setPrevious((prev) => prev - maxCount);
+  }
 
   return (
     <PopOver>
@@ -31,7 +55,7 @@ function ComputersTable({ computers }) {
             </Table.Header>
 
             <Table.Body
-              data={computers || []}
+              data={pagination || []}
               render={(computer) =>
                 laboratory.laboratoryId === computer.location && (
                   <ComputerRow key={computer.computerId} computer={computer} />
@@ -39,13 +63,15 @@ function ComputersTable({ computers }) {
               }
             />
             <Table.Footer>
-              <span>Showing N to N of N computers.</span>
+              <span>
+                Showing {previous + 1} to {next} of {totalComputers} computers
+              </span>
               <Container>
-                <button disabled>
+                <button onClick={onPrevious} disabled={previous === 0}>
                   <HiOutlineChevronLeft />
                   <span>Previous</span>
                 </button>
-                <button>
+                <button onClick={onNext} disabled={next >= computers.length}>
                   <span>Next</span>
                   <HiOutlineChevronRight />
                 </button>
