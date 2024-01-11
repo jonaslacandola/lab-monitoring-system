@@ -23,16 +23,16 @@ function Computers() {
   const { laboratories, isLoadingLaboratories } = useLaboratories();
   const { isUpdatingAllStatus, updateAllStatus } =
     useUpdateComputersAllStatus();
-  // const [, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   const isLoading = isUpdatingAllStatus || isLoadingLaboratories;
 
-  // function handleSortByAvailable() {
-  //   setSearchParams({ sortBy: "available" });
-  // }
-  // function handleSortByUnavailable() {
-  //   setSearchParams({ sortBy: "unavailable" });
-  // }
+  function handleSortByAvailable() {
+    setSearchParams({ sortBy: "available" });
+  }
+  function handleSortByUnavailable() {
+    setSearchParams({ sortBy: "unavailable" });
+  }
 
   return (
     <>
@@ -45,10 +45,10 @@ function Computers() {
           {Boolean(laboratories?.length) && (
             <Container>
               <Menu>
-                {/* <Menu.Button onClick={updateAllStatus}>
+                <Menu.Button onClick={updateAllStatus}>
                   <span>Reset all</span>
                   <HiMiniArrowPath />
-                </Menu.Button> */}
+                </Menu.Button>
                 <Modal.Open window={"computers"}>
                   <Menu.Button>
                     <span>Add</span>
@@ -56,14 +56,14 @@ function Computers() {
                   </Menu.Button>
                 </Modal.Open>
               </Menu>
-              {/* <Menu>
+              <Menu>
                 <Menu.Button onClick={handleSortByAvailable}>
                   <span>All available</span>
                 </Menu.Button>
                 <Menu.Button onClick={handleSortByUnavailable}>
                   <span>All unavailable</span>
                 </Menu.Button>
-              </Menu> */}
+              </Menu>
             </Container>
           )}
         </Container>
