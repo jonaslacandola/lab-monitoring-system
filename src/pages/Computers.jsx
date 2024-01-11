@@ -1,15 +1,16 @@
+import { HiMiniArrowPath, HiOutlinePlus } from "react-icons/hi2";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import ComputersTable from "../features/computers/ComputersTable";
+
 import Menu from "../ui/Menu";
 import Modal from "../ui/Modal";
-import { HiMiniArrowPath, HiOutlinePlus } from "react-icons/hi2";
-import { useUpdateComputersAllStatus } from "../features/computers/useUpdateComputersAllStatus";
 import Spinner from "../ui/Spinner";
-import CreateComputerForm from "../features/computers/CreateComputerForm";
-import { useSearchParams } from "react-router-dom";
-import { useComputers } from "../features/computers/useComputers";
-import { useEffect, useState } from "react";
 import EmptyPage from "../ui/EmptyPage";
+import ComputersTable from "../features/computers/ComputersTable";
+import CreateComputerForm from "../features/computers/CreateComputerForm";
+
+import { useUpdateComputersAllStatus } from "../features/computers/useUpdateComputersAllStatus";
+import { useLaboratories } from "../features/laboratories/useLaboratories";
 
 const Container = styled.div`
   display: flex;
@@ -19,118 +20,68 @@ const Container = styled.div`
 `;
 
 function Computers() {
-  const { computers, isLoadingComputers } = useComputers();
-  const [sortedComputers, setSortedComputers] = useState([]);
-  const isNotAvailable = computers?.reduce(
-    (acc, prev) =>
-      prev.computerStatus === "unavailable" && !prev.computerDamage
-        ? acc + 1
-        : acc,
-    0
-  );
+  const { laboratories, isLoadingLaboratories } = useLaboratories();
   const { isUpdatingAllStatus, updateAllStatus } =
     useUpdateComputersAllStatus();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const isLoading = isLoadingComputers || isUpdatingAllStatus;
+  // const [, setSearchParams] = useSearchParams();
 
-  useEffect(
-    function () {
-      const sortBy = searchParams.get("sortBy");
+  const isLoading = isUpdatingAllStatus || isLoadingLaboratories;
 
-      switch (sortBy) {
-        case "ascending":
-          setSortedComputers(
-            computers?.slice().sort((a, b) => a.computer - b.computer)
-          );
-          break;
-        case "descending":
-          setSortedComputers(
-            computers?.slice().sort((a, b) => b.computer - a.computer)
-          );
-          break;
-        case "available":
-          setSortedComputers(
-            computers?.filter(
-              (computer) => computer.computerStatus === "available"
-            )
-          );
-          break;
-        case "unavailable":
-          setSortedComputers(
-            computers?.filter(
-              (computer) => computer.computerStatus === "unavailable"
-            )
-          );
-          break;
-      }
-    },
-    [searchParams, computers]
-  );
-
-  function handleSortChange(e) {
-    const { value } = e.target;
-
-    setSearchParams({ sortBy: value });
-  }
+  // function handleSortByAvailable() {
+  //   setSearchParams({ sortBy: "available" });
+  // }
+  // function handleSortByUnavailable() {
+  //   setSearchParams({ sortBy: "unavailable" });
+  // }
 
   return (
     <>
       {isLoading && <Spinner />}
-      {!isLoadingComputers && (
-        <Modal>
-          <Container>
-            <h1>All computers</h1>
 
-            {Boolean(computers?.length) && (
-              <Container>
-                <Menu>
-                  {Boolean(isNotAvailable) && (
-                    <Menu.Button onClick={updateAllStatus}>
-                      <span>Reset All</span>
-                      <HiMiniArrowPath />
-                    </Menu.Button>
-                  )}
-                  <Modal.Open window={"computers"}>
-                    <Menu.Button>
-                      <span>Add</span>
-                      <HiOutlinePlus />
-                    </Menu.Button>
-                  </Modal.Open>
-                </Menu>
+      <Modal>
+        <Container>
+          <h1>All computers</h1>
 
-                <Menu>
-                  <select onChange={handleSortChange}>
-                    <option value="ascending">
-                      Sort computers (ascending)
-                    </option>
-                    <option value="descending">
-                      Sort computers (descending)
-                    </option>
-                    <option value="available">
-                      Sort computers all available
-                    </option>
-                    <option value="unavailable">
-                      Sort computers all unavailable
-                    </option>
-                  </select>
-                </Menu>
-              </Container>
-            )}
-          </Container>
-
-          {!computers?.length && <EmptyPage />}
-
-          {(Boolean(sortedComputers?.length) || Boolean(computers?.length)) && (
-            <ComputersTable
-              computers={sortedComputers.length ? sortedComputers : computers}
-            />
+          {Boolean(laboratories?.length) && (
+            <Container>
+              <Menu>
+                {/* <Menu.Button onClick={updateAllStatus}>
+                  <span>Reset all</span>
+                  <HiMiniArrowPath />
+                </Menu.Button> */}
+                <Modal.Open window={"computers"}>
+                  <Menu.Button>
+                    <span>Add</span>
+                    <HiOutlinePlus />
+                  </Menu.Button>
+                </Modal.Open>
+              </Menu>
+              {/* <Menu>
+                <Menu.Button onClick={handleSortByAvailable}>
+                  <span>All available</span>
+                </Menu.Button>
+                <Menu.Button onClick={handleSortByUnavailable}>
+                  <span>All unavailable</span>
+                </Menu.Button>
+              </Menu> */}
+            </Container>
           )}
+        </Container>
 
-          <Modal.Window name={"computers"} position={"right"}>
-            <CreateComputerForm />
-          </Modal.Window>
-        </Modal>
-      )}
+        {!isLoading && Boolean(!laboratories?.length) && <EmptyPage />}
+
+        {Boolean(laboratories?.length) &&
+          laboratories.map((laboratory) => (
+            <ComputersTable
+              key={laboratory.laboratoryId}
+              location={laboratory.laboratoryId}
+            />
+          ))}
+
+        <Modal.Window name={"computers"} position={"right"}>
+          <CreateComputerForm />
+        </Modal.Window>
+      </Modal>
     </>
   );
 }

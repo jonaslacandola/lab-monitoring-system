@@ -5,80 +5,71 @@ import Table from "../../ui/Table";
 import PopOver from "../../ui/PopOver";
 import ComputerRow from "./ComputerRow";
 
-import { useLaboratories } from "../laboratories/useLaboratories";
+import { useComputersByLabId } from "./useComputersByLabId";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
   gap: 1rem;
 `;
 
-const maxCount = 10;
+function ComputersTable({ location }) {
+  const [paginated, setPaginated] = useState([]);
+  const [next, setNext] = useState(10);
+  const [prev, setPrev] = useState(0);
+  const [searchParams] = useSearchParams(0);
 
-function ComputersTable({ computers = [] }) {
-  const [pagination, setPagination] = useState();
-  const [from, setFrom] = useState(0);
-  const [next, setNext] = useState(maxCount);
-  const { isLoadingLaboratories, laboratories } = useLaboratories();
+  const { computers = [] } = useComputersByLabId(location);
   const totalComputers = computers.length;
 
   useEffect(
     function () {
-      setPagination(computers?.slice(from, next));
+      setPaginated(computers.slice(prev, next));
     },
-    [from, next, computers]
+    [computers, prev, next]
   );
 
   function onNext() {
-    setNext((next) => next + maxCount);
-    setFrom((from) => from + maxCount);
+    setNext((next) => next + 10);
+    setPrev((prev) => prev + 10);
   }
 
-  function onPrevious() {
-    setNext((next) => next - maxCount);
-    setFrom((from) => from - maxCount);
+  function onPrev() {
+    setPrev((prev) => prev - 10);
+    setNext((next) => next - 10);
   }
 
   return (
     <PopOver>
-      {!isLoadingLaboratories &&
-        laboratories?.map((laboratory) => (
-          <Table
-            columns={" .6fr .8fr .6fr .5fr .1fr"}
-            key={laboratory.laboratoryId}
-          >
-            <Table.Header>
-              <span>Computer</span>
-              <span>Location</span>
-              <span>Status</span>
-              <span>Damage</span>
-            </Table.Header>
+      <Table columns={" .6fr .8fr .6fr .5fr .1fr"}>
+        <Table.Header>
+          <span>Computer</span>
+          <span>Location</span>
+          <span>Status</span>
+          <span>Damage</span>
+        </Table.Header>
 
-            <Table.Body
-              data={pagination || []}
-              render={(computer) =>
-                laboratory.laboratoryId === computer.location && (
-                  <ComputerRow key={computer.computerId} computer={computer} />
-                )
-              }
-            />
-            <Table.Footer>
-              <span>
-                Showing {from + 1} to {next} of {totalComputers} computers
-              </span>
-              <Container>
-                <button onClick={onPrevious} disabled={from === 0}>
-                  <HiOutlineChevronLeft />
-                  <span>Previous</span>
-                </button>
-                <button onClick={onNext} disabled={next >= computers.length}>
-                  <span>Next</span>
-                  <HiOutlineChevronRight />
-                </button>
-              </Container>
-            </Table.Footer>
-          </Table>
-        ))}
+        <Table.Body
+          data={paginated}
+          render={(computer) => (
+            <ComputerRow key={computer.computerId} computer={computer} />
+          )}
+        />
+        <Table.Footer>
+          <span>Showing n to n of {totalComputers} computers</span>
+          <Container>
+            <button onClick={onPrev} disabled={prev === 0}>
+              <HiOutlineChevronLeft />
+              <span>Previous</span>
+            </button>
+            <button onClick={onNext} disabled={!(next < computers.length)}>
+              <span>Next</span>
+              <HiOutlineChevronRight />
+            </button>
+          </Container>
+        </Table.Footer>
+      </Table>
     </PopOver>
   );
 }

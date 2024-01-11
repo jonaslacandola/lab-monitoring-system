@@ -74,7 +74,7 @@ export async function createNewLaboratory(newLaboratory) {
 }
 
 export async function updateLaboratoryById(laboratory) {
-  const imageName = `${Math.random()}-${laboratory.imageURL.name}`.replace(
+  const imageName = `${Math.random()}-${laboratory.imageURL?.name}`.replace(
     "/",
     ""
   );

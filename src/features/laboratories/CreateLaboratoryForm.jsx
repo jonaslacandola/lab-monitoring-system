@@ -123,7 +123,7 @@ function CreateLaboratoryForm({ onCloseModal }) {
           <FileInput
             {...register("imageURL", {
               required: Boolean(!laboratoryId),
-              validate: (file) => file && file[0].type.startsWith("image"),
+              validate: (file) => file && file[0]?.type.startsWith("image"),
             })}
           />
         </InputBox>

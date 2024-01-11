@@ -116,25 +116,27 @@ function CreateComputerForm({ onCloseModal }) {
             {...register("computer", { required: true })}
           />
         </InputBox>
-        <InputBox>
-          <label>Location</label>
-          <Select
-            {...register("location", { required: true })}
-            disabled={isLoadingLaboratories}
-          >
-            <option value="" hidden>
-              Select location from option
-            </option>
-            {laboratories?.map((laboratory) => (
-              <option
-                key={laboratory.laboratoryId}
-                value={laboratory.laboratoryId}
-              >
-                {laboratory.laboratoryName}
+        {!computerId && (
+          <InputBox>
+            <label>Location</label>
+            <Select
+              {...register("location", { required: true })}
+              disabled={isLoadingLaboratories}
+            >
+              <option value="" hidden>
+                Select location from option
               </option>
-            ))}
-          </Select>
-        </InputBox>
+              {laboratories?.map((laboratory) => (
+                <option
+                  key={laboratory.laboratoryId}
+                  value={laboratory.laboratoryId}
+                >
+                  {laboratory.laboratoryName}
+                </option>
+              ))}
+            </Select>
+          </InputBox>
+        )}
         <InputBox>
           <label>Status</label>
           <Select {...register("computerStatus")} disabled={!status}>

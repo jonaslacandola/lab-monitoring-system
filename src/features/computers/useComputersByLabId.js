@@ -1,26 +1,34 @@
-import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { getComputersByLaboratoryId } from "../../services/apiComputers";
 import toast from "react-hot-toast";
-import { getAvailableComputersByLaboratoryId } from "../../services/apiComputers";
 
-export function useComputersByLabId() {
+export function useComputersByLabId(laboratoryId) {
   const [computers, setComputers] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const {
+    isLoading: isLoadingComputers,
+    data,
+    error,
+  } = useQuery({
+    queryKey: ["computers"],
+    queryFn: () => getComputersByLaboratoryId(laboratoryId),
+  });
 
-  async function getComputers(ID) {
-    if (!ID) return;
-    try {
-      setError("");
-      setIsLoading(true);
-      const data = await getAvailableComputersByLaboratoryId(ID);
-      setComputers(data);
-    } catch (err) {
-      toast.error(err.message);
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  useEffect(
+    function () {
+      setComputers(data?.slice().sort((a, b) => a.computer - b.computer));
+    },
+    [data]
+  );
 
-  return { computers, isLoading, error, getComputers };
+  useEffect(
+    function () {
+      if (error) {
+        toast.error(error.message);
+      }
+    },
+    [error]
+  );
+
+  return { computers, isLoadingComputers };
 }

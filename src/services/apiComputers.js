@@ -1,11 +1,10 @@
 import supabase from "../supabase";
 
-export async function getAvailableComputersByLaboratoryId(laboratoryId) {
+export async function getComputersByLaboratoryId(laboratoryId) {
   const { data, error } = await supabase
     .from("computers")
-    .select("*")
-    .eq("location", laboratoryId)
-    .eq("computerStatus", "available");
+    .select("*, laboratories: location (*)")
+    .eq("location", laboratoryId);
 
   if (error) {
     console.log(error.message);
@@ -57,6 +56,13 @@ export async function updateComputerStatus(computerId, status) {
 }
 
 export async function updateAllUnavailable() {
+  const { data } = await supabase
+    .from("computers")
+    .select("*")
+    .eq("computerStatus", "unavailable");
+
+  if (!data?.length) throw new Error("All computers are available.");
+
   const { error } = await supabase
     .from("computers")
     .update({ computerStatus: "available" })
