@@ -4,6 +4,7 @@ import { HiOutlineArrowRightOnRectangle, HiOutlineUser } from "react-icons/hi2";
 import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
 import SignOutPrompt from "./SignOutPrompt";
+import { useNavigate } from "react-router";
 
 const StyledHeader = styled.header`
   padding: 0.8rem 4rem;
@@ -21,10 +22,16 @@ const HeaderButton = styled(Button)`
 `;
 
 function AdminHeader() {
+  const navigate = useNavigate()
+
+  function handleUser() {
+    navigate('/admin/user', {replace: true})
+  }
+
   return (
     <StyledHeader>
       <p>Jonas Lacandola</p>
-      <HeaderButton type="icon">
+      <HeaderButton type="icon" onClick={handleUser}>
         <HiOutlineUser />
       </HeaderButton>
       <Modal>

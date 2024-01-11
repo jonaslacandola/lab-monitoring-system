@@ -21,6 +21,7 @@ import { useEffect } from "react";
 import { getUserSessionToken } from "./services/apiUsers";
 import { useUsersProvider } from "./features/users/UsersProvider";
 import { fetchedSession } from "./features/users/usersActions";
+import User from "./pages/User";
 
 const queryClient = new QueryClient();
 
@@ -73,6 +74,7 @@ function App() {
             <Route path="computer" element={<Computers />} />
             <Route path="laboratory" element={<Laboratories />} />
             <Route path="settings" element={<Admin />} />
+            <Route path="user" element={<User/>} />
           </Route>
         </Routes>
       </BrowserRouter>
