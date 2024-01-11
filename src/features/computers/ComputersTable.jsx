@@ -17,26 +17,26 @@ const maxCount = 10;
 
 function ComputersTable({ computers = [] }) {
   const [pagination, setPagination] = useState();
-  const [previous, setPrevious] = useState(0);
+  const [from, setFrom] = useState(0);
   const [next, setNext] = useState(maxCount);
   const { isLoadingLaboratories, laboratories } = useLaboratories();
   const totalComputers = computers.length;
 
   useEffect(
     function () {
-      setPagination(computers?.slice(previous, next));
+      setPagination(computers?.slice(from, next));
     },
-    [previous, next, computers]
+    [from, next, computers]
   );
 
   function onNext() {
     setNext((next) => next + maxCount);
-    setPrevious((prev) => prev + maxCount);
+    setFrom((from) => from + maxCount);
   }
 
   function onPrevious() {
     setNext((next) => next - maxCount);
-    setPrevious((prev) => prev - maxCount);
+    setFrom((from) => from - maxCount);
   }
 
   return (
@@ -64,10 +64,10 @@ function ComputersTable({ computers = [] }) {
             />
             <Table.Footer>
               <span>
-                Showing {previous + 1} to {next} of {totalComputers} computers
+                Showing {from + 1} to {next} of {totalComputers} computers
               </span>
               <Container>
-                <button onClick={onPrevious} disabled={previous === 0}>
+                <button onClick={onPrevious} disabled={from === 0}>
                   <HiOutlineChevronLeft />
                   <span>Previous</span>
                 </button>
