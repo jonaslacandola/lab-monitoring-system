@@ -1,6 +1,7 @@
 import { useEffect } from "react";
-import { useUsersProvider } from "../features/users/UsersProvider";
 import { useNavigate } from "react-router";
+
+import { useUsersProvider } from "../features/users/UsersProvider";
 
 function ProtectedRoute({ children }) {
   const { user } = useUsersProvider();
@@ -8,7 +9,7 @@ function ProtectedRoute({ children }) {
 
   useEffect(
     function () {
-      if (!user) navigate("/", { replace: true });
+      if (!user) navigate("/sign-in", { replace: true });
     },
     [navigate, user]
   );

@@ -52,7 +52,8 @@ export async function createNewLaboratory(newLaboratory) {
     newComputers.push({
       computer: `00${count}`,
       location: data.at(0)?.laboratoryId,
-      computerStatus: "available",
+      computerStatus:
+        newLaboratory.laboratoryStatus === "open" ? "available" : "unavailable",
       computerDamage: "",
     });
   }
@@ -99,9 +100,23 @@ export async function updateLaboratoryById(laboratory) {
     throw new Error("Unable to updated laboratory, please try again later.");
   }
 
+  console.log(laboratory.laboratoryStatus);
+
+  const { error: computerError } = await supabase
+    .from("computers")
+    .update({
+      computerStatus:
+        laboratory.laboratoryStatus === "open" ? "available" : "unavailable",
+    })
+    .eq("location", laboratory.laboratoryId);
+
+  if (computerError) {
+    console.error(computerError.message);
+    throw new Error("Unable to update laboratory computers.");
+  }
+
   if (!laboratory.imageURL) return;
 
-  //Write code here
   const { error: uploadError } = await supabase.storage
     .from("laboratories")
     .upload(imageName, laboratory.imageURL);

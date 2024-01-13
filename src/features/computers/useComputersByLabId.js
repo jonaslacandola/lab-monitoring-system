@@ -1,25 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getComputersByLaboratoryId } from "../../services/apiComputers";
 import toast from "react-hot-toast";
 
 export function useComputersByLabId(laboratoryId) {
-  const [computers, setComputers] = useState([]);
   const {
     isLoading: isLoadingComputers,
-    data,
+    data: computers,
     error,
   } = useQuery({
-    queryKey: ["computers"],
+    queryKey: [`computers-${laboratoryId}`],
     queryFn: () => getComputersByLaboratoryId(laboratoryId),
   });
-
-  useEffect(
-    function () {
-      setComputers(data?.slice().sort((a, b) => a.computer - b.computer));
-    },
-    [data]
-  );
 
   useEffect(
     function () {

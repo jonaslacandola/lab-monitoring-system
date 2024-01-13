@@ -11,6 +11,7 @@ import CreateComputerForm from "../features/computers/CreateComputerForm";
 
 import { useUpdateComputersAllStatus } from "../features/computers/useUpdateComputersAllStatus";
 import { useLaboratories } from "../features/laboratories/useLaboratories";
+import { useEffect, useState } from "react";
 
 const Container = styled.div`
   display: flex;
@@ -20,6 +21,7 @@ const Container = styled.div`
 `;
 
 function Computers() {
+  const [sort, setSort] = useState("all");
   const { laboratories, isLoadingLaboratories } = useLaboratories();
   const { isUpdatingAllStatus, updateAllStatus } =
     useUpdateComputersAllStatus();
@@ -27,11 +29,11 @@ function Computers() {
 
   const isLoading = isUpdatingAllStatus || isLoadingLaboratories;
 
-  function handleSortByAvailable() {
-    setSearchParams({ sortBy: "available" });
-  }
-  function handleSortByUnavailable() {
-    setSearchParams({ sortBy: "unavailable" });
+  useEffect(function () {}, []);
+
+  function handleSortChange(sortBy) {
+    setSearchParams({ sortBy });
+    setSort(sortBy);
   }
 
   return (
@@ -57,10 +59,22 @@ function Computers() {
                 </Modal.Open>
               </Menu>
               <Menu>
-                <Menu.Button onClick={handleSortByAvailable}>
+                <Menu.Button
+                  active={Boolean(sort === "all").toString()}
+                  onClick={() => handleSortChange("all")}
+                >
+                  <span>All computers</span>
+                </Menu.Button>
+                <Menu.Button
+                  active={Boolean(sort === "available").toString()}
+                  onClick={() => handleSortChange("available")}
+                >
                   <span>All available</span>
                 </Menu.Button>
-                <Menu.Button onClick={handleSortByUnavailable}>
+                <Menu.Button
+                  active={Boolean(sort === "unavailable").toString()}
+                  onClick={() => handleSortChange("unavailable")}
+                >
                   <span>All unavailable</span>
                 </Menu.Button>
               </Menu>

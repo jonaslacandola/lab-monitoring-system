@@ -5,6 +5,7 @@ import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
 import SignOutPrompt from "./SignOutPrompt";
 import { useNavigate } from "react-router";
+import { useUsersProvider } from "./UsersProvider";
 
 const StyledHeader = styled.header`
   padding: 0.8rem 4rem;
@@ -21,16 +22,26 @@ const HeaderButton = styled(Button)`
   }
 `;
 
+const Img = styled.img`
+  height: 45px;
+  border-radius: 100%;
+  border: 1px solid var(--blue-500);
+`;
+
 function AdminHeader() {
-  const navigate = useNavigate()
+  const { user } = useUsersProvider();
+  const navigate = useNavigate();
 
   function handleUser() {
-    navigate('/admin/user', {replace: true})
+    navigate("/admin/user", { replace: true });
   }
 
   return (
     <StyledHeader>
-      <p>Jonas Lacandola</p>
+      <Img src={user.pfpURL} />
+      <p>
+        {user?.firstName} {user?.lastName}
+      </p>
       <HeaderButton type="icon" onClick={handleUser}>
         <HiOutlineUser />
       </HeaderButton>

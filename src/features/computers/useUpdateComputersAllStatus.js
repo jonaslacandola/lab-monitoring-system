@@ -8,7 +8,10 @@ export function useUpdateComputersAllStatus() {
     useMutation({
       mutationFn: updateAllUnavailable,
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["computers"] });
+        queryClient.invalidateQueries(["computers"]);
+        toast.success(
+          "All computers unavailable has been successfully updated."
+        );
       },
       onError: (error) => {
         toast.error(error.message);

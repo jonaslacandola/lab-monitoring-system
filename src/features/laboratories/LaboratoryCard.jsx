@@ -59,6 +59,11 @@ const Title = styled.span`
   font-size: 22px;
 `;
 
+const Img = styled.img`
+  height: 640px;
+  border-radius: 4px;
+`;
+
 const SubText = styled.p`
   color: var(--gray-500);
   font-size: 14px;
@@ -136,7 +141,9 @@ function LaboratoryCard({ laboratory }) {
     <>
       {isDeleting && <Spinner />}
       <LabCard>
-        <img src={imageURL} />
+        <Modal.Open>
+          <img src={imageURL} />
+        </Modal.Open>
         <Body>
           <Container>
             <Title>{laboratoryName}</Title>
@@ -190,6 +197,9 @@ function LaboratoryCard({ laboratory }) {
             Deletion might result to permanently loss of data and information.
           </Warning>
         </ConfirmDelete>
+      </Modal.Window>
+      <Modal.Window image={imageURL}>
+        <Img src={imageURL} />
       </Modal.Window>
     </>
   );

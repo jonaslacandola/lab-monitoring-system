@@ -1,8 +1,8 @@
-import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import { Outlet } from "react-router";
 
 const StyledAppLayout = styled.div`
   height: 100dvh;

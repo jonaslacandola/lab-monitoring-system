@@ -1,19 +1,22 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
 import { useUsersProvider } from "../features/users/UsersProvider";
+import { useCurrentSession } from "../features/users/useCurrentSession";
+import Spinner from "./Spinner";
 
 function ReRouter({ children }) {
   const { user } = useUsersProvider();
-  const navigate = useNavigate();
+  const { isFetchingSession, signIn } = useCurrentSession();
 
   useEffect(
     function () {
-      if (user) navigate("/admin", { replace: true });
+      if (!user) signIn();
     },
-    [navigate, user]
+    [signIn, user]
   );
 
-  if (!user) return children;
+  if (isFetchingSession) return <Spinner />;
+
+  if (!user && !isFetchingSession) return children;
 }
 
 export default ReRouter;

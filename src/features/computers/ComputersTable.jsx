@@ -15,19 +15,55 @@ const Container = styled.div`
 `;
 
 function ComputersTable({ location }) {
+  const { computers = [] } = useComputersByLabId(location);
   const [paginated, setPaginated] = useState([]);
+  const [sortedComputers, setSortedComputers] = useState([]);
   const [next, setNext] = useState(10);
   const [prev, setPrev] = useState(0);
-  const [searchParams] = useSearchParams(0);
+  const [searchParams] = useSearchParams();
 
-  const { computers = [] } = useComputersByLabId(location);
-  const totalComputers = computers.length;
+  const sortBy = searchParams.get("sortBy");
+  const totalComputers = sortedComputers?.length;
 
   useEffect(
     function () {
-      setPaginated(computers.slice(prev, next));
+      switch (sortBy) {
+        case "all": {
+          setSortedComputers(
+            computers.slice().sort((a, b) => a.computer - b.computer)
+          );
+          break;
+        }
+        case "available": {
+          setSortedComputers(
+            computers.filter(
+              (computer) => computer.computerStatus === "available"
+            )
+          );
+          break;
+        }
+        case "unavailable": {
+          setSortedComputers(
+            computers.filter(
+              (computer) => computer.computerStatus === "unavailable"
+            )
+          );
+          break;
+        }
+        default:
+          setSortedComputers(
+            computers.slice().sort((a, b) => a.computer - b.computer)
+          );
+      }
     },
-    [computers, prev, next]
+    [computers, sortBy]
+  );
+
+  useEffect(
+    function () {
+      setPaginated(sortedComputers.slice(prev, next));
+    },
+    [prev, next, sortedComputers]
   );
 
   function onNext() {
@@ -57,13 +93,16 @@ function ComputersTable({ location }) {
           )}
         />
         <Table.Footer>
-          <span>Showing n to n of {totalComputers} computers</span>
+          <span>Showing {totalComputers} results</span>
           <Container>
             <button onClick={onPrev} disabled={prev === 0}>
               <HiOutlineChevronLeft />
               <span>Previous</span>
             </button>
-            <button onClick={onNext} disabled={!(next < computers.length)}>
+            <button
+              onClick={onNext}
+              disabled={!(next < sortedComputers.length)}
+            >
               <span>Next</span>
               <HiOutlineChevronRight />
             </button>

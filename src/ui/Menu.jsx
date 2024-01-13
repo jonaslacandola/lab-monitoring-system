@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const StyledMenu = styled.div`
   display: flex;
@@ -12,7 +12,6 @@ const StyledMenu = styled.div`
   & > * {
     background-color: transparent;
     border: none;
-    color: var(--slate-800);
     font-size: 15px;
     padding: 2px 8px;
     border-radius: 4px;
@@ -23,27 +22,34 @@ const StyledMenu = styled.div`
       outline: 2px solid var(--blue-500);
     }
   }
-
-  & > button {
-    transition: all ease-in-out 300ms;
-
-    &:hover {
-      background-color: var(--gray-100);
-    }
-    &:focus {
-      outline: var(--blue-500);
-    }
-  }
 `;
 
 const Button = styled.button`
   display: flex;
   align-items: center;
+  transition: all ease-in-out 300ms;
 
-  & > svg {
+  &:hover {
+    background-color: var(--blue-500);
+    color: white;
+  }
+  &:focus {
+    outline: var(--blue-500);
+  }
+  & svg {
     margin-left: 4px;
     color: var(--blue-500);
   }
+  &:hover svg {
+    color: white;
+  }
+
+  ${(props) =>
+    props.active === "true" &&
+    css`
+      background-color: var(--blue-500);
+      color: white;
+    `}
 `;
 
 function Menu({ children }) {
