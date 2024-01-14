@@ -14,7 +14,6 @@ import Computers from "./pages/Computers";
 import Laboratories from "./pages/Laboratories";
 import Admin from "./pages/Admin";
 import AdminAppLayout from "./features/users/AdminAppLayout";
-import User from "./pages/User";
 
 import GlobalStyles from "./styles/GlobalStyles";
 
@@ -48,8 +47,8 @@ function App() {
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/computer" element={<Computers />} />
             <Route path="/admin/laboratory" element={<Laboratories />} />
-            <Route path="/admin/settings" element={<Admin />} />
-            <Route path="/admin/user" element={<User />} />
+            <Route path="/admin/admin" element={<Admin />} />
+            <Route path="/admin/admin/:adminId" element={<p>Hello</p>} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         </Routes>

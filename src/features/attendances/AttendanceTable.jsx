@@ -28,7 +28,7 @@ function AttendanceTable({ filteredAttendances = [] }) {
       ) : (
         <Table.Body
           data={
-            !filteredAttendances.length
+            filteredAttendances.length
               ? filteredAttendances
               : currentAttendances
           }
@@ -40,6 +40,8 @@ function AttendanceTable({ filteredAttendances = [] }) {
           )}
         />
       )}
+
+      <Table.Footer></Table.Footer>
     </Table>
   );
 }

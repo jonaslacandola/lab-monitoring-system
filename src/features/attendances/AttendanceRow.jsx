@@ -1,17 +1,6 @@
 import Table from "../../ui/Table";
 
-function formatTime(timeString) {
-  if (!timeString) return "--:-- --";
-
-  const [hours, minutes] = timeString.split(":");
-
-  const formattedTime = new Date(0, 0, 0, hours, minutes).toLocaleTimeString(
-    [],
-    { hour: "2-digit", minute: "2-digit" }
-  );
-
-  return formattedTime;
-}
+import { formatTime } from "../../data/formatTime";
 
 function AttendanceRow({ attendance }) {
   const { students, laboratories, computers, timeIn, timeOut, createdAt } =
@@ -32,7 +21,7 @@ function AttendanceRow({ attendance }) {
       <span>{computer ? computer : "-"}</span>
       <span>{formattedTimeIn}</span>
       <span>{formattedTimeOut}</span>
-      <span>{createdAt}</span>
+      <span>{createdAt?.replaceAll("-", "/")}</span>
     </Table.Row>
   );
 }

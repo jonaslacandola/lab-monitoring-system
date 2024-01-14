@@ -49,8 +49,8 @@ const Status = styled.span`
   ${(props) =>
     props.type === "close" &&
     css`
-      color: var(--gray-500);
-      background-color: var(--gray-100);
+      color: var(--slate-400);
+      background-color: var(--slate-100);
     `}
 `;
 
@@ -65,7 +65,7 @@ const Img = styled.img`
 `;
 
 const SubText = styled.p`
-  color: var(--gray-500);
+  color: var(--slate-400);
   font-size: 14px;
   text-transform: capitalize;
 `;

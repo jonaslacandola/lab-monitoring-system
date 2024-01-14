@@ -73,7 +73,6 @@ const StyledRow = styled(TableRow)`
   &:nth-child(even) {
     background-color: var(--slate-50);
   }
-
   &:not(:last-child) {
     border-bottom: 1px solid var(--slate-200);
   }
@@ -86,6 +85,8 @@ const Empty = styled.div`
   padding: 1rem 2rem;
   background-color: white;
   border-radius: 0 0 8px 8px;
+  border-top: none;
+  border: 1px solid var(--slate-200);
 `;
 
 const StyledBody = styled.section``;

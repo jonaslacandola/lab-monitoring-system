@@ -32,6 +32,8 @@ export async function getAttendanceWithStudentLaboratoryComputer() {
     throw new Error("Unable to retrieve attendance information.");
   }
 
+  console.log(data);
+
   return data;
 }
 
@@ -49,4 +51,16 @@ export async function getAttendancesByDate(currentDate) {
   }
 
   return data;
+}
+
+export async function updateCurrentAttendancesTimeOut(timeOut, currentDate) {
+  const { error } = await supabase
+    .from("attendances")
+    .update({ timeOut })
+    .eq("createdAt", currentDate);
+
+  if (error) {
+    console.error(error.message);
+    throw new Error("Unable to update current attendances.");
+  }
 }

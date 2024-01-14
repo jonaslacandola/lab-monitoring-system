@@ -1,11 +1,15 @@
 import styled from "styled-components";
-import { HiOutlineArrowRightOnRectangle, HiOutlineUser } from "react-icons/hi2";
+import {
+  HiOutlineArrowLeftOnRectangle,
+  HiOutlineCog6Tooth,
+} from "react-icons/hi2";
 
 import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
+import PopOver from "../../ui/PopOver";
 import SignOutPrompt from "./SignOutPrompt";
-import { useNavigate } from "react-router";
 import { useUsersProvider } from "./UsersProvider";
+import { useNavigate } from "react-router";
 
 const StyledHeader = styled.header`
   padding: 0.8rem 4rem;
@@ -17,7 +21,14 @@ const StyledHeader = styled.header`
 `;
 
 const HeaderButton = styled(Button)`
+  padding: 0;
+  margin-right: 8px;
+
+  & span {
+    font-size: 15px;
+  }
   & svg {
+    font-size: 20px;
     color: var(--blue-500);
   }
 `;
@@ -28,34 +39,69 @@ const Img = styled.img`
   border: 1px solid var(--blue-500);
 `;
 
-function AdminHeader() {
-  const { user } = useUsersProvider();
-  const navigate = useNavigate();
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+`;
 
-  function handleUser() {
-    navigate("/admin/user", { replace: true });
+const TextContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const SubText = styled.p`
+  font-size: 12px;
+  color: var(--slate-400);
+`;
+
+function AdminHeader() {
+  const navigate = useNavigate();
+  const { user } = useUsersProvider();
+
+  function handleUserSettings() {
+    navigate(`/admin/admin/:${user.adminId}`);
   }
 
   return (
-    <StyledHeader>
-      <Img src={user.pfpURL} />
-      <p>
-        {user?.firstName} {user?.lastName}
-      </p>
-      <HeaderButton type="icon" onClick={handleUser}>
-        <HiOutlineUser />
-      </HeaderButton>
-      <Modal>
-        <Modal.Open window={"signOutPrompt"}>
-          <HeaderButton type="icon">
-            <HiOutlineArrowRightOnRectangle />
-          </HeaderButton>
-        </Modal.Open>
-        <Modal.Window name={"signOutPrompt"}>
-          <SignOutPrompt />
-        </Modal.Window>
-      </Modal>
-    </StyledHeader>
+    <PopOver>
+      <StyledHeader>
+        <Modal>
+          <PopOver.Container>
+            <PopOver.Toggle Id={"signIn"}>
+              <Container>
+                <Img src={user.pfpURL} />
+                <TextContainer>
+                  <p>
+                    {user?.firstName} {user?.lastName}
+                  </p>
+                  <SubText>{user.adminEmail}</SubText>
+                </TextContainer>
+              </Container>
+            </PopOver.Toggle>
+            <PopOver.Window Id={"signIn"}>
+              <HeaderButton type="icon" onClick={handleUserSettings}>
+                <HiOutlineCog6Tooth />
+                <span>Settings</span>
+              </HeaderButton>
+
+              <Modal.Open window={"signOutPrompt"}>
+                <HeaderButton type="icon">
+                  <HiOutlineArrowLeftOnRectangle />
+                  <span>Sign out</span>
+                </HeaderButton>
+              </Modal.Open>
+            </PopOver.Window>
+          </PopOver.Container>
+
+          <Modal.Window name={"signOutPrompt"}>
+            <SignOutPrompt />
+          </Modal.Window>
+        </Modal>
+      </StyledHeader>
+    </PopOver>
   );
 }
 

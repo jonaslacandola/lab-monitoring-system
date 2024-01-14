@@ -2,9 +2,9 @@ import styled from "styled-components";
 import StyledNavLink from "../../ui/StyledNavLink";
 import {
   HiOutlineBuildingOffice,
-  HiOutlineCog6Tooth,
   HiOutlineSquare3Stack3D,
   HiOutlineTv,
+  HiOutlineUserGroup,
 } from "react-icons/hi2";
 
 const StyledSidebar = styled.aside`
@@ -31,8 +31,8 @@ function AdminSidebar() {
       >
         Laboratory
       </StyledNavLink>
-      <StyledNavLink to={"/admin/settings"} icon={<HiOutlineCog6Tooth />}>
-        Settings
+      <StyledNavLink to={"/admin/admin"} icon={<HiOutlineUserGroup />}>
+        Admin
       </StyledNavLink>
     </StyledSidebar>
   );

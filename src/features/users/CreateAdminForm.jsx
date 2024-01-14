@@ -128,7 +128,7 @@ function CreateAdminForm() {
       </InputContainer>
       {error && <ErrorMessage>{error}</ErrorMessage>}
       <Button disabled={isCreating}>
-        {isCreating ? "Creating new account" : "Create new account"}
+        {isCreating ? "Creating account" : "Create account"}
       </Button>
     </StyledForm>
   );
