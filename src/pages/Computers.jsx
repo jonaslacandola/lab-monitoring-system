@@ -1,4 +1,5 @@
-import { HiMiniArrowPath, HiOutlinePlus } from "react-icons/hi2";
+import { useState } from "react";
+import { HiOutlinePlus } from "react-icons/hi2";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
@@ -7,11 +8,9 @@ import Modal from "../ui/Modal";
 import Spinner from "../ui/Spinner";
 import EmptyPage from "../ui/EmptyPage";
 import ComputersTable from "../features/computers/ComputersTable";
-import CreateComputerForm from "../features/computers/CreateComputerForm";
 
-import { useUpdateComputersAllStatus } from "../features/computers/useUpdateComputersAllStatus";
+import CreateComputerForm from "../features/computers/CreateComputerForm";
 import { useLaboratories } from "../features/laboratories/useLaboratories";
-import { useEffect, useState } from "react";
 
 const Container = styled.div`
   display: flex;
@@ -23,13 +22,9 @@ const Container = styled.div`
 function Computers() {
   const [sort, setSort] = useState("all");
   const { laboratories, isLoadingLaboratories } = useLaboratories();
-  const { isUpdatingAllStatus, updateAllStatus } =
-    useUpdateComputersAllStatus();
   const [, setSearchParams] = useSearchParams();
 
-  const isLoading = isUpdatingAllStatus || isLoadingLaboratories;
-
-  useEffect(function () {}, []);
+  const isLoading = isLoadingLaboratories;
 
   function handleSortChange(sortBy) {
     setSearchParams({ sortBy });
@@ -47,10 +42,6 @@ function Computers() {
           {Boolean(laboratories?.length) && (
             <Container>
               <Menu>
-                <Menu.Button onClick={updateAllStatus}>
-                  <span>Reset all</span>
-                  <HiMiniArrowPath />
-                </Menu.Button>
                 <Modal.Open window={"computers"}>
                   <Menu.Button>
                     <span>Add</span>

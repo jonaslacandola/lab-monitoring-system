@@ -32,6 +32,7 @@ const GlobalStyles = createGlobalStyle`
         --blue-300: #93c5fd;
         --blue-400: #60a5fa;
         --blue-500: #3b82f6;
+        --blue-600: #2563eb;
 
         /* Sky */
         --sky-100: #e0f2fe;

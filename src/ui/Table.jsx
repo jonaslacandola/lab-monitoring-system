@@ -12,7 +12,7 @@ const TableRow = styled.div`
   display: grid;
   grid-template-columns: ${(props) => props.columns};
   align-items: center;
-  padding: 0.8rem 2rem;
+  padding: 0.5rem 2rem;
   font-size: 15px;
   color: var(--slate-800);
 `;
@@ -24,7 +24,7 @@ TableRow.defaultProps = {
 const StyledHeader = styled(TableRow)`
   color: var(--slate-50);
   padding: 1rem 2rem;
-  font-size: 16px;
+  font-size: 15px;
   background-color: var(--slate-800);
   border-bottom: 1px solid var(--slate-200);
   border-radius: 6px 6px 0 0;
@@ -39,6 +39,7 @@ const StyledFooter = styled.div`
   padding: 1rem 2rem;
   color: var(--slate-50);
   border-radius: 0 0 6px 6px;
+  font-size: 15px;
 
   & button {
     display: flex;
@@ -55,26 +56,23 @@ const StyledFooter = styled.div`
     }
 
     & span {
-      font-size: 16px;
+      font-size: 14px;
     }
 
     & svg {
       color: var(--slate-50);
-      font-size: 1.5rem;
+      font-size: 1rem;
     }
   }
 `;
 
 const StyledRow = styled(TableRow)`
-  border-left: 1px solid var(--slate-200);
-  border-right: 1px solid var(--slate-200);
+  border-left: 1px solid var(--slate-100);
+  border-right: 1px solid var(--slate-100);
   background-color: white;
 
-  &:nth-child(even) {
-    background-color: var(--slate-50);
-  }
   &:not(:last-child) {
-    border-bottom: 1px solid var(--slate-200);
+    border-bottom: 1px solid var(--slate-100);
   }
 `;
 

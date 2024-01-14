@@ -1,5 +1,9 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { format } from "date-fns";
 
 import Input from "../../ui/Input";
 import InputContainer from "../../ui/InputContainer";
@@ -8,13 +12,9 @@ import Button from "../../ui/Button";
 
 import { useStudentById } from "../students/useStudentById";
 import { useCreateAttendance } from "../attendances/useCreateAttendance";
-import { useLaboratories } from "../laboratories/useLaboratories";
 import { useAvailableComputers } from "../computers/useAvailableComputers";
-import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { useUpdateComputer } from "../computers/useUpdateComputer";
-import toast from "react-hot-toast";
-import { format } from "date-fns";
+import { useAvailableLaboratories } from "../laboratories/useAvailableLaboratories";
 
 const StyledForm = styled.form`
   display: flex;
@@ -51,7 +51,7 @@ function CreateAttendanceForm({ onCloseModal }) {
   } = useStudentById();
   const { computers, isLoadingComputers } = useAvailableComputers();
   const { isCreating, createAttendance } = useCreateAttendance();
-  const { laboratories, isLoadingLaboratories } = useLaboratories();
+  const { laboratories, isLoadingLaboratories } = useAvailableLaboratories();
   const { isUpdatingStatus, updateStatus } = useUpdateComputer();
   const currentDate = format(new Date(), "yyyy-MM-dd");
   const queryClient = useQueryClient();

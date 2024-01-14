@@ -11,16 +11,24 @@ import { useDeleteComputerById } from "./useDeleteComputerById";
 import { useSearchParams } from "react-router-dom";
 
 const Status = styled.span`
+  padding: 2px 8px;
+  border-radius: 50px;
+  font-size: 13px;
+
   ${(props) =>
     props.status === "available" &&
     css`
       color: var(--lime-500);
+      background-color: var(--lime-100);
+      width: 27%;
     `}
 
   ${(props) =>
     props.status === "unavailable" &&
     css`
       color: var(--red-600);
+      background-color: var(--red-100);
+      width: 33%;
     `}
 `;
 
@@ -63,9 +71,9 @@ function ComputerRow({ computer }) {
         <Table.Row>
           <span>{computerName}</span>
           <span>{laboratoryName}</span>
-          <Status status={computerStatus}>• {computerStatus}</Status>
+          <Status status={computerStatus}>{computerStatus}</Status>
           <span>
-            <i>{computerDamage ? computerDamage : "--"}</i>
+            {computerDamage ? <i>{computerDamage}</i> : <i>&mdash;</i>}
           </span>
 
           <PopOver.Container>

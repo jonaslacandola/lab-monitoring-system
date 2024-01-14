@@ -7,6 +7,16 @@ export async function getLaboratories() {
 
   return data;
 }
+export async function getAvailableLaboratories() {
+  const { data, error } = await supabase
+    .from("laboratories")
+    .select("*")
+    .eq("laboratoryStatus", "open");
+
+  if (error) throw new Error("Unable to retrieve laboratories information.");
+
+  return data;
+}
 
 export async function createNewLaboratory(newLaboratory) {
   const imageName = `${Math.random()}-${newLaboratory.imageURL.name}`.replace(
@@ -108,7 +118,8 @@ export async function updateLaboratoryById(laboratory) {
       computerStatus:
         laboratory.laboratoryStatus === "open" ? "available" : "unavailable",
     })
-    .eq("location", laboratory.laboratoryId);
+    .eq("location", laboratory.laboratoryId)
+    .eq("computerDamage", "");
 
   if (computerError) {
     console.error(computerError.message);

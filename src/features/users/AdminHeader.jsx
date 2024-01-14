@@ -1,15 +1,11 @@
 import styled from "styled-components";
-import {
-  HiOutlineArrowLeftOnRectangle,
-  HiOutlineCog6Tooth,
-} from "react-icons/hi2";
+import { HiOutlineArrowLeftOnRectangle } from "react-icons/hi2";
 
 import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
 import PopOver from "../../ui/PopOver";
 import SignOutPrompt from "./SignOutPrompt";
 import { useUsersProvider } from "./UsersProvider";
-import { useNavigate } from "react-router";
 
 const StyledHeader = styled.header`
   padding: 0.8rem 4rem;
@@ -58,12 +54,7 @@ const SubText = styled.p`
 `;
 
 function AdminHeader() {
-  const navigate = useNavigate();
   const { user } = useUsersProvider();
-
-  function handleUserSettings() {
-    navigate(`/admin/admin/:${user.adminId}`);
-  }
 
   return (
     <PopOver>
@@ -82,11 +73,6 @@ function AdminHeader() {
               </Container>
             </PopOver.Toggle>
             <PopOver.Window Id={"signIn"}>
-              <HeaderButton type="icon" onClick={handleUserSettings}>
-                <HiOutlineCog6Tooth />
-                <span>Settings</span>
-              </HeaderButton>
-
               <Modal.Open window={"signOutPrompt"}>
                 <HeaderButton type="icon">
                   <HiOutlineArrowLeftOnRectangle />

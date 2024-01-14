@@ -57,7 +57,8 @@ export async function updateCurrentAttendancesTimeOut(timeOut, currentDate) {
   const { error } = await supabase
     .from("attendances")
     .update({ timeOut })
-    .eq("createdAt", currentDate);
+    .eq("createdAt", currentDate)
+    .is("timeOut", null);
 
   if (error) {
     console.error(error.message);

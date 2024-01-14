@@ -9,6 +9,16 @@ import Button from "../ui/Button";
 import { useAttendancesByCurrentDate } from "../features/attendances/useAttendancesByCurrentDate";
 import { useEffect, useState } from "react";
 import { useUpdateTimeOutAll } from "../features/attendances/useUpdateTimeOutAll";
+import {
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 const Table = styled.div`
   background-color: white;
@@ -41,6 +51,11 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   gap: 1rem;
+
+  & p {
+    margin-top: 1rem;
+    color: var(--slate-500);
+  }
 `;
 
 const Row = styled.div`
@@ -60,6 +75,46 @@ const TableButton = styled(Button)`
     font-size: 14px;
   }
 `;
+
+const GraphContainer = styled.div`
+  background-color: white;
+  border: 1px solid var(--slate-200);
+  border-radius: 8px;
+  padding: 1rem 2rem;
+`;
+
+const Title = styled.p`
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0.2rem 0 1rem 0;
+`;
+
+const attendanceData = [
+  {
+    week: "Week 1",
+    Cisco: 305,
+    Red: 254,
+    Mac: 154,
+  },
+  {
+    week: "Week 2",
+    Cisco: 325,
+    Red: 154,
+    Mac: 304,
+  },
+  {
+    week: "Week 3",
+    Cisco: 200,
+    Red: 100,
+    Mac: 167,
+  },
+  {
+    week: "Week 4",
+    Cisco: 312,
+    Red: 200,
+    Mac: 100,
+  },
+];
 
 function Dashboard() {
   const currentDate = format(new Date(), "yyyy-MM-dd").replaceAll("-", "/");
@@ -91,23 +146,53 @@ function Dashboard() {
             <DateAndTime>{currentDate}</DateAndTime>
             <Time />
           </Container>
+
           <TableButton onClick={handleTimeOutAll}>
             <span>Time out</span>
           </TableButton>
         </Header>
+
         {isLoadingCurrentAttendances && (
           <Container>
             <MiniSpinner />
           </Container>
         )}
+        {Boolean(!currentAttendances?.length) && (
+          <Container>
+            <p>There are no attendances today.</p>
+          </Container>
+        )}
         <Body>
           {!isLoadingCurrentAttendances &&
-            currentAttendances.length &&
+            Boolean(currentAttendances?.length) &&
             currentAttendances?.map((attendance) => (
               <TableRow key={attendance.attendanceId} attendance={attendance} />
             ))}
         </Body>
       </Table>
+      <GraphContainer>
+        <Title>Weekly attendance</Title>
+        <ResponsiveContainer
+          width="100%"
+          height={350}
+          style={{
+            fontSize: "15px",
+          }}
+        >
+          <LineChart data={attendanceData}>
+            <XAxis dataKey={"week"} />
+            <YAxis />
+            <Tooltip
+              contentStyle={{ borderRadius: "4px", padding: "0.5rem 1rem" }}
+            />
+            <Legend />
+            <CartesianGrid stroke="var(--slate-300)" strokeDasharray={"5 5"} />
+            <Line type="monotone" dataKey="Cisco" stroke="var(--blue-600)" />
+            <Line type="monotone" dataKey="Red" stroke="var(--red-600)" />
+            <Line type="monotone" dataKey="Mac" stroke="var(--lime-600)" />
+          </LineChart>
+        </ResponsiveContainer>
+      </GraphContainer>
     </>
   );
 }

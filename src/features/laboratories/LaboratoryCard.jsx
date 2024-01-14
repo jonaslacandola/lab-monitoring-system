@@ -37,7 +37,7 @@ const Body = styled.div`
 const Status = styled.span`
   font-size: 14px;
   border-radius: 50px;
-  padding: 4px 8px;
+  padding: 2px 10px;
 
   ${(props) =>
     props.type === "open" &&
