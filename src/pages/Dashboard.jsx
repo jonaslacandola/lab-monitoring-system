@@ -31,6 +31,7 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 1rem;
   & h2 {
     color: var(--slate-700);
     font-weight: 600;
@@ -44,7 +45,8 @@ const DateAndTime = styled.span`
 `;
 
 const Body = styled.div`
-  padding: 10px 0;
+  overflow-y: scroll;
+  max-height: 12rem;
 `;
 
 const Container = styled.div`
@@ -162,13 +164,17 @@ function Dashboard() {
             <p>There are no attendances today.</p>
           </Container>
         )}
-        <Body>
-          {!isLoadingCurrentAttendances &&
-            Boolean(currentAttendances?.length) &&
-            currentAttendances?.map((attendance) => (
-              <TableRow key={attendance.attendanceId} attendance={attendance} />
-            ))}
-        </Body>
+        {!isLoadingCurrentAttendances &&
+          Boolean(currentAttendances?.length) && (
+            <Body>
+              {currentAttendances.map((attendance) => (
+                <TableRow
+                  key={attendance.attendanceId}
+                  attendance={attendance}
+                />
+              ))}
+            </Body>
+          )}
       </Table>
       <GraphContainer>
         <Title>Weekly attendance</Title>
@@ -209,7 +215,7 @@ function TableRow({ attendance }) {
       <span>{studentName}</span>
       <span>{yearAndSection}</span>
       <span>{laboratoryName}</span>
-      <span>{computer}</span>
+      <span>PC {computer}</span>
       <span>{formatTime(timeIn)}</span>
       <span>{timeOut ? formatTime(timeOut) : "--:-- --"}</span>
     </Row>

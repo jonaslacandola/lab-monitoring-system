@@ -110,8 +110,6 @@ export async function updateLaboratoryById(laboratory) {
     throw new Error("Unable to updated laboratory, please try again later.");
   }
 
-  console.log(laboratory.laboratoryStatus);
-
   const { error: computerError } = await supabase
     .from("computers")
     .update({

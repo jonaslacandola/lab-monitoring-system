@@ -101,7 +101,6 @@ const MoreLess = styled.button`
 `;
 
 function LaboratoryCard({ laboratory }) {
-  //FIXED THIS THE STATE IS NOT WORKING
   const [isShowMore, setIsShowMore] = useState(false);
   const {
     laboratoryId,
@@ -141,7 +140,7 @@ function LaboratoryCard({ laboratory }) {
     <>
       {isDeleting && <Spinner />}
       <LabCard>
-        <Modal.Open>
+        <Modal.Open window={laboratoryName}>
           <img src={imageURL} />
         </Modal.Open>
         <Body>
@@ -198,7 +197,7 @@ function LaboratoryCard({ laboratory }) {
           </Warning>
         </ConfirmDelete>
       </Modal.Window>
-      <Modal.Window image={imageURL}>
+      <Modal.Window name={laboratoryName}>
         <Img src={imageURL} />
       </Modal.Window>
     </>

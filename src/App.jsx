@@ -33,6 +33,7 @@ function App() {
               </ReRouter>
             }
           >
+            <Route index element={<Navigate replace to={"/attendance"} />} />
             <Route path="/attendance" element={<Attendance />} />
             <Route path="/sign-in" element={<Login />} />
           </Route>

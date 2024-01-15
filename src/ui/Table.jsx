@@ -14,7 +14,7 @@ const TableRow = styled.div`
   align-items: center;
   padding: 0.5rem 2rem;
   font-size: 15px;
-  color: var(--slate-800);
+  color: var(--slate-700);
 `;
 
 TableRow.defaultProps = {

@@ -21,7 +21,7 @@ function AttendanceRow({ attendance }) {
       <span>{computer ? computer : "-"}</span>
       <span>{formattedTimeIn}</span>
       <span>{formattedTimeOut}</span>
-      <span>{createdAt?.replaceAll("-", "/")}</span>
+      <span>{createdAt}</span>
     </Table.Row>
   );
 }

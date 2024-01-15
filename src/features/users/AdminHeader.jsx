@@ -31,6 +31,7 @@ const HeaderButton = styled(Button)`
 
 const Img = styled.img`
   height: 45px;
+  width: 45px;
   border-radius: 100%;
   border: 1px solid var(--blue-500);
 `;
