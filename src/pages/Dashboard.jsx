@@ -18,8 +18,9 @@ import Spinner from "../ui/Spinner";
 import Button from "../ui/Button";
 
 import { useAttendancesByCurrentDate } from "../features/attendances/useAttendancesByCurrentDate";
-import { useUpdateTimeOutAll } from "../features/attendances/useUpdateTimeOutAll";
 import SearchBar from "../ui/Searchbar";
+import { useUpdateTimeOut } from "../features/attendances/useUpdateTimeOut";
+import toast from "react-hot-toast";
 
 const Table = styled.div`
   background-color: white;
@@ -123,10 +124,11 @@ const attendanceData = [
 function Dashboard() {
   const [filter, setFilter] = useState("");
   const [filteredAttendances, setFilteredAttendances] = useState([]);
-  const currentDate = format(new Date(), "yyyy-MM-dd").replaceAll("-", "/");
-  const { isUpdating, updateTimeOut } = useUpdateTimeOutAll();
   const { currentAttendances, isLoadingCurrentAttendances } =
-    useAttendancesByCurrentDate();
+  useAttendancesByCurrentDate();
+  const {isUpdating, timeOut} = useUpdateTimeOut()
+
+  const currentDate = format(new Date(), "yyyy-MM-dd").replaceAll("-", "/");
 
   function handleTimeOutAll() {
     const dateAndTime = new Date();
@@ -138,16 +140,46 @@ function Dashboard() {
       .toString()
       .padStart(2, "0")}`;
 
-    updateTimeOut({ currentTime, currentDate });
+    const timedOutAttendance = filteredAttendances
+    .filter((attendance) => attendance.timeOut === null)
+    .map((attendance) => (
+      {attendanceId: attendance.attendanceId, 
+        studentId: attendance.studentId, 
+        laboratoryId: attendance.laboratoryId, 
+        computerId: attendance.computerId, 
+        timeIn: attendance.timeIn, 
+        timeOut: currentTime, 
+        createdAt: attendance.createdAt}
+      ))
+    
+    if (!timedOutAttendance.length) {
+      toast.error("All attendances are timed out.")
+     return;
+    }
+
+    timeOut({timedOutAttendance, currentDate})
+    setFilter("")
+    setFilteredAttendances([])
   }
 
   function handleFilterChanged() {
-    if (!filter) setFilteredAttendances(currentAttendances);
     setFilteredAttendances(
       currentAttendances.filter((attendance) =>
         attendance.laboratories?.laboratoryName.startsWith(filter)
       )
     );
+  }
+
+  function handleQueryChanged(e) {
+    const {value: query} = e.target
+
+    if (!query) {
+      setFilter("")
+      setFilteredAttendances([]) 
+      return;
+    }
+
+    setFilter(query)
   }
 
   return (
@@ -164,12 +196,12 @@ function Dashboard() {
             </Container>
             <SearchBar
               value={filter}
-              onChange={(e) => setFilter(e.target.value)}
+              onChange={handleQueryChanged}
               onQuery={handleFilterChanged}
               size={"small"}
               placeholder={"Filter attendance"}
             />
-            <TableButton onClick={handleTimeOutAll}>
+            <TableButton onClick={handleTimeOutAll} disabled={!filteredAttendances.length}>
               <span>Time out</span>
             </TableButton>
           </Container>
@@ -181,12 +213,12 @@ function Dashboard() {
           </Container>
         )}
 
-        <TableBody
-          data={currentAttendances}
+        {!isLoadingCurrentAttendances && <TableBody
+          data={filteredAttendances.length ? filteredAttendances : currentAttendances}
           render={(attendance) => (
             <TableRow key={attendance.attendanceId} attendance={attendance} />
           )}
-        />
+        />}
       </Table>
       <GraphContainer>
         <Title>Weekly attendance</Title>
@@ -216,13 +248,10 @@ function Dashboard() {
 }
 
 function TableBody({ data, render }) {
-  // {Boolean(!currentAttendances?.length) && (
-  //   <Container>
-  //     <p>There are no attendances today.</p>
-  //   </Container>
-  // )}
 
-  return <Body>{data?.map(render)}</Body>;
+  if (!data?.length) return <Container><p>There are not attendances today.</p></Container>
+
+  if (data?.length) return <Body>{data?.map(render)}</Body>;
 }
 
 function TableRow({ attendance }) {

@@ -20,7 +20,7 @@ const Status = styled.span`
     css`
       color: var(--lime-500);
       background-color: var(--lime-100);
-      width: 27%;
+      width: 4.8rem;
     `}
 
   ${(props) =>
@@ -28,7 +28,7 @@ const Status = styled.span`
     css`
       color: var(--red-600);
       background-color: var(--red-100);
-      width: 33%;
+      width: 5.8rem;
     `}
 `;
 
