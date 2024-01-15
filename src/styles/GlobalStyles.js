@@ -80,6 +80,7 @@ const GlobalStyles = createGlobalStyle`
 
     body {
         color: var(--slate-800);
+        font-size: 15px;
     }
 `;
 

@@ -10,6 +10,7 @@ import { useLaboratories } from "../laboratories/useLaboratories";
 import { useSearchParams } from "react-router-dom";
 import { useUpdateSpecificComputer } from "./useUpdateSpecificComputer";
 import Spinner from "../../ui/Spinner";
+import toast from "react-hot-toast";
 
 const StyledForm = styled.form`
   display: flex;
@@ -78,6 +79,14 @@ function CreateComputerForm({ onCloseModal }) {
 
   function onSubmit(data) {
     if (computerId) {
+      
+      const currentComp = {computer: computerName, location, computerStatus: status, computerDamage: damage}
+
+      if (JSON.stringify(currentComp) === JSON.stringify(data)) {
+        toast.error("There are no changes found.")
+        return;
+      }
+
       update(
         {
           ...data,
@@ -89,6 +98,9 @@ function CreateComputerForm({ onCloseModal }) {
         {
           onSuccess: () => {
             onCloseModal?.();
+            if (data.computerDamage) {
+              toast("The computer is damaged, and has been set to be unavailable.")
+            }
           },
         }
       );
