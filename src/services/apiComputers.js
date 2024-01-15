@@ -111,6 +111,21 @@ export async function createComputer(newComputer) {
     console.error(error.message);
     throw new Error("Unable to add computer, please try again later.");
   }
+
+  const { data: laboratory } = await supabase
+    .from("laboratories")
+    .select()
+    .eq("laboratoryId", newComputer.location)
+    .single();
+
+  const { error: labError } = await supabase
+    .from("laboratories")
+    .upsert([{ ...laboratory, totalComputers: laboratory.totalComputers + 1 }]);
+
+  if (labError) {
+    console.error(labError.message);
+    throw new Error("Unable to update laboratory.");
+  }
 }
 
 export async function getComputerById(Id) {

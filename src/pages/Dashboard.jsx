@@ -1,14 +1,6 @@
 import styled from "styled-components";
 import { formatTime } from "../data/formatTime";
 import { format } from "date-fns";
-
-import MiniSpinner from "../ui/MiniSpinner";
-import Spinner from "../ui/Spinner";
-import Button from "../ui/Button";
-
-import { useAttendancesByCurrentDate } from "../features/attendances/useAttendancesByCurrentDate";
-import { useEffect, useState } from "react";
-import { useUpdateTimeOutAll } from "../features/attendances/useUpdateTimeOutAll";
 import {
   CartesianGrid,
   Legend,
@@ -19,6 +11,15 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useEffect, useState } from "react";
+
+import MiniSpinner from "../ui/MiniSpinner";
+import Spinner from "../ui/Spinner";
+import Button from "../ui/Button";
+
+import { useAttendancesByCurrentDate } from "../features/attendances/useAttendancesByCurrentDate";
+import { useUpdateTimeOutAll } from "../features/attendances/useUpdateTimeOutAll";
+import SearchBar from "../ui/Searchbar";
 
 const Table = styled.div`
   background-color: white;
@@ -52,6 +53,7 @@ const Body = styled.div`
 const Container = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 1rem;
 
   & p {
@@ -119,6 +121,8 @@ const attendanceData = [
 ];
 
 function Dashboard() {
+  const [filter, setFilter] = useState("");
+  const [filteredAttendances, setFilteredAttendances] = useState([]);
   const currentDate = format(new Date(), "yyyy-MM-dd").replaceAll("-", "/");
   const { isUpdating, updateTimeOut } = useUpdateTimeOutAll();
   const { currentAttendances, isLoadingCurrentAttendances } =
@@ -137,6 +141,15 @@ function Dashboard() {
     updateTimeOut({ currentTime, currentDate });
   }
 
+  function handleFilterChanged() {
+    if (!filter) setFilteredAttendances(currentAttendances);
+    setFilteredAttendances(
+      currentAttendances.filter((attendance) =>
+        attendance.laboratories?.laboratoryName.startsWith(filter)
+      )
+    );
+  }
+
   return (
     <>
       <h1>Dashboard</h1>
@@ -145,13 +158,21 @@ function Dashboard() {
         <Header>
           <h2>Today</h2>
           <Container>
-            <DateAndTime>{currentDate}</DateAndTime>
-            <Time />
+            <Container>
+              <DateAndTime>{currentDate}</DateAndTime>
+              <Time />
+            </Container>
+            <SearchBar
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              onQuery={handleFilterChanged}
+              size={"small"}
+              placeholder={"Filter attendance"}
+            />
+            <TableButton onClick={handleTimeOutAll}>
+              <span>Time out</span>
+            </TableButton>
           </Container>
-
-          <TableButton onClick={handleTimeOutAll}>
-            <span>Time out</span>
-          </TableButton>
         </Header>
 
         {isLoadingCurrentAttendances && (
@@ -159,22 +180,13 @@ function Dashboard() {
             <MiniSpinner />
           </Container>
         )}
-        {Boolean(!currentAttendances?.length) && (
-          <Container>
-            <p>There are no attendances today.</p>
-          </Container>
-        )}
-        {!isLoadingCurrentAttendances &&
-          Boolean(currentAttendances?.length) && (
-            <Body>
-              {currentAttendances.map((attendance) => (
-                <TableRow
-                  key={attendance.attendanceId}
-                  attendance={attendance}
-                />
-              ))}
-            </Body>
+
+        <TableBody
+          data={currentAttendances}
+          render={(attendance) => (
+            <TableRow key={attendance.attendanceId} attendance={attendance} />
           )}
+        />
       </Table>
       <GraphContainer>
         <Title>Weekly attendance</Title>
@@ -203,19 +215,31 @@ function Dashboard() {
   );
 }
 
+function TableBody({ data, render }) {
+  // {Boolean(!currentAttendances?.length) && (
+  //   <Container>
+  //     <p>There are no attendances today.</p>
+  //   </Container>
+  // )}
+
+  return <Body>{data?.map(render)}</Body>;
+}
+
 function TableRow({ attendance }) {
   const { students, computers, laboratories, timeIn, timeOut } = attendance;
   const { studentId, studentName, yearAndSection } = students;
-  const { computer } = computers;
-  const { laboratoryName } = laboratories;
 
   return (
     <Row>
       <span>{studentId}</span>
       <span>{studentName}</span>
       <span>{yearAndSection}</span>
-      <span>{laboratoryName}</span>
-      <span>PC {computer}</span>
+      {laboratories ? (
+        <span>{laboratories.laboratoryName}</span>
+      ) : (
+        <span>&mdash;</span>
+      )}
+      {computers ? <span>PC {computers.computer}</span> : <span>&mdash;</span>}
       <span>{formatTime(timeIn)}</span>
       <span>{timeOut ? formatTime(timeOut) : "--:-- --"}</span>
     </Row>

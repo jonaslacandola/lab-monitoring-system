@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
 import { useEffect, useState } from "react";
 
@@ -8,19 +8,7 @@ const StyledSearchbar = styled.div`
   border-radius: 50px;
   display: flex;
   align-items: center;
-  padding: 8px 1rem;
   gap: 10px;
-
-  & input {
-    border: none;
-    outline: none;
-    font-size: 16px;
-    color: var(--slate-800);
-
-    &::placeholder {
-      color: var(--slate-400);
-    }
-  }
 
   &:focus-within {
     & svg {
@@ -29,14 +17,56 @@ const StyledSearchbar = styled.div`
     }
   }
 
-  & svg {
-    font-size: 1.5rem;
-    color: var(--slate-700);
-    stroke-width: 2px;
-  }
+  ${(props) =>
+    props.size === "medium" &&
+    css`
+      padding: 8px 1rem;
+      & input {
+        border: none;
+        outline: none;
+        font-size: 16px;
+        color: var(--slate-800);
+
+        &::placeholder {
+          color: var(--slate-400);
+        }
+      }
+
+      & svg {
+        font-size: 1.5rem;
+        color: var(--slate-700);
+        stroke-width: 2px;
+      }
+    `}
+
+  ${(props) =>
+    props.size === "small" &&
+    css`
+      padding: 4px 1rem;
+      & input {
+        border: none;
+        outline: none;
+        font-size: 15px;
+        color: var(--slate-800);
+
+        &::placeholder {
+          color: var(--slate-400);
+        }
+      }
+
+      & svg {
+        font-size: 1.2rem;
+        color: var(--slate-700);
+        stroke-width: 2px;
+      }
+    `}
 `;
 
-function Searchbar({ value, onChange, onQuery, placeholder }) {
+StyledSearchbar.defaultProps = {
+  size: "medium",
+};
+
+function Searchbar({ size, value, onChange, onQuery, placeholder }) {
   const [isFocused, setIsFocused] = useState(false);
 
   useEffect(
@@ -54,7 +84,7 @@ function Searchbar({ value, onChange, onQuery, placeholder }) {
   );
 
   return (
-    <StyledSearchbar>
+    <StyledSearchbar size={size}>
       <input
         type="text"
         value={value}
