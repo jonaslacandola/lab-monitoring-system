@@ -132,7 +132,7 @@ export async function updateLaboratoryById(laboratory) {
 
   if (uploadError) {
     console.error(uploadError.message);
-    throw new Error("Unable to updated new image.");
+    throw new Error("Unable to update new image.");
   }
 
   const { error: deleteError } = await supabase.storage

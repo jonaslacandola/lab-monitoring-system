@@ -7,7 +7,7 @@ export function useUpdateLaboratoryById() {
   const { isPending: isUpdating, mutate: update } = useMutation({
     mutationFn: updateLaboratoryById,
     onSuccess: () => {
-      toast.success("Computer has been successfully updated.");
+      toast.success("Laboratory has been successfully updated.");
       queryClient.invalidateQueries(["laboratories"]);
     },
     onError: (error) => {
