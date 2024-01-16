@@ -62,6 +62,16 @@ export async function createAdminWithEmailAndPassword(admin) {
   const imageName = `${Math.random()}-${pfpURL.name}`.replace("/", "");
   const imagePath = `${supabaseUrl}/storage/v1/object/public/admins/${imageName}`;
 
+  const { data: isExist } = await supabase
+    .from("admins")
+    .select()
+    .eq("adminEmail", email)
+    .single();
+
+  if (isExist) {
+    throw new Error("Email has been taken, please use a different email.");
+  }
+
   const { data, error } = await supabase.auth.signUp({ email, password });
 
   if (error) {

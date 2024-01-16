@@ -185,7 +185,7 @@ function Dashboard() {
               onChange={handleQueryChanged}
               onQuery={handleFilterChanged}
               size={"small"}
-              placeholder={"Filter attendance"}
+              placeholder={"Search laboratory"}
             />
             <TableButton
               onClick={handleTimeOutAll}

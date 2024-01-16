@@ -31,8 +31,6 @@ function Laboratories() {
   const { user } = useUsersProvider();
   const { isLoadingLaboratories, laboratories } = useLaboratories();
 
-  console.log(user.role);
-
   if (user.role !== "administrator") return <PageNotAvailable />;
 
   if (user.role === "administrator")

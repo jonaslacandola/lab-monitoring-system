@@ -28,19 +28,6 @@ export async function getAvailableComputers() {
   return data;
 }
 
-export async function getComputers() {
-  const { data, error } = await supabase
-    .from("computers")
-    .select("*, laboratories: location (*)");
-
-  if (error) {
-    console.error(error.message);
-    throw new Error("Unable to retrieve computers information.");
-  }
-
-  return data;
-}
-
 export async function updateComputerStatus(computerId, status) {
   if (!computerId) return;
 
@@ -126,20 +113,6 @@ export async function createComputer(newComputer) {
     console.error(labError.message);
     throw new Error("Unable to update laboratory.");
   }
-}
-
-export async function getComputerById(Id) {
-  const { data, error } = await supabase
-    .from("computers")
-    .select("*")
-    .eq("computerId", Id);
-
-  if (error) {
-    console.error(error.message);
-    throw new Error("Unable to retrieve computer information.");
-  }
-
-  return data;
 }
 
 export async function updateComputer(computer) {

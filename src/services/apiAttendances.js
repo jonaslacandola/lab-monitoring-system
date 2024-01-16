@@ -10,17 +10,6 @@ export async function createStudentAttendance(newAttendance) {
 }
 
 export async function getAttendances() {
-  const { data, error } = await supabase.from("attendances").select("*");
-
-  if (error) {
-    console.error(error.message);
-    throw new Error("Unable to retrieve attendance information.");
-  }
-
-  return data;
-}
-
-export async function getAttendanceWithStudentLaboratoryComputer() {
   const { data, error } = await supabase
     .from("attendances")
     .select(
@@ -31,8 +20,6 @@ export async function getAttendanceWithStudentLaboratoryComputer() {
     console.error(error.message);
     throw new Error("Unable to retrieve attendance information.");
   }
-
-  console.log(data);
 
   return data;
 }
@@ -64,13 +51,35 @@ export async function updateAttendancesTimeOut(attendances, currentDate) {
     throw new Error("Unable to time out attendances.");
   }
 
+  // const { error: computerError } = await supabase
+  //   .from("computers")
+  //   .update({ computerStatus: "available" })
+  //   .eq("computerStatus", "unavailable");
+
+  // if (computerError) {
+  //   console.error(computerError.message);
+  //   throw new Error("Unable to update computers.");
+  // }
+}
+
+export async function updateTimeOutSpecific(attendance) {
+  const { error } = await supabase
+    .from("attendances")
+    .upsert([attendance])
+    .eq("createdAt", attendance.currentDate);
+
+  if (error) {
+    console.error(error.message);
+    throw new Error("Unable to time out attendance, please try again later.");
+  }
+
   const { error: computerError } = await supabase
     .from("computers")
     .update({ computerStatus: "available" })
-    .eq("computerStatus", "unavailable");
+    .eq("computerId", attendance.computerId);
 
   if (computerError) {
     console.error(computerError.message);
-    throw new Error("Unable to update computers.");
+    throw new Error("Unable to available computer used.");
   }
 }

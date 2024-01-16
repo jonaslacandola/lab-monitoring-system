@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { formatTime } from "../../data/formatTime";
 import { HiOutlineClock } from "react-icons/hi2";
+import { useTimeOutSpecific } from "../attendances/useTimeOutSpecific";
+import Spinner from "../../ui/Spinner";
 
 const Row = styled.div`
   display: grid;
@@ -41,29 +43,69 @@ const TimeOut = styled.div`
 `;
 
 function TableRow({ attendance }) {
-  const { students, computers, laboratories, timeIn, timeOut } = attendance;
+  const { isTimingOut, timeOutSpecific } = useTimeOutSpecific();
+  const {
+    attendanceId,
+    laboratoryId,
+    computerId,
+    students,
+    computers,
+    laboratories,
+    timeIn,
+    timeOut,
+    createdAt,
+  } = attendance;
   const { studentId, studentName, yearAndSection } = students;
 
+  function handleTimeOut() {
+    const dateAndTime = new Date();
+    const currentTime = `${dateAndTime
+      .getHours()
+      .toString()
+      .padStart(2, "0")}:${dateAndTime
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}`;
+    const attendance = {
+      attendanceId,
+      studentId,
+      laboratoryId,
+      computerId,
+      timeIn,
+      timeOut: currentTime,
+      createdAt,
+    };
+
+    timeOutSpecific(attendance);
+  }
+
   return (
-    <Row>
-      <span>{studentId}</span>
-      <span>{studentName}</span>
-      <span>{yearAndSection}</span>
-      {laboratories ? (
-        <span>{laboratories.laboratoryName}</span>
-      ) : (
-        <span>&mdash;</span>
-      )}
-      {computers ? <span>PC {computers.computer}</span> : <span>&mdash;</span>}
-      <span>{formatTime(timeIn)}</span>
-      <span>{timeOut ? formatTime(timeOut) : "--:-- --"}</span>
-      {!timeOut && (
-        <TimeOut>
-          <HiOutlineClock />
-          <span>Time out</span>
-        </TimeOut>
-      )}
-    </Row>
+    <>
+      {isTimingOut && <Spinner />}
+      <Row>
+        <span>{studentId}</span>
+        <span>{studentName}</span>
+        <span>{yearAndSection}</span>
+        {laboratories ? (
+          <span>{laboratories.laboratoryName}</span>
+        ) : (
+          <span>&mdash;</span>
+        )}
+        {computers ? (
+          <span>PC {computers.computer}</span>
+        ) : (
+          <span>&mdash;</span>
+        )}
+        <span>{formatTime(timeIn)}</span>
+        <span>{timeOut ? formatTime(timeOut) : "--:-- --"}</span>
+        {!timeOut && (
+          <TimeOut onClick={handleTimeOut}>
+            <HiOutlineClock />
+            <span>Time out</span>
+          </TimeOut>
+        )}
+      </Row>
+    </>
   );
 }
 
