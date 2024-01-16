@@ -36,6 +36,7 @@ function App() {
             <Route index element={<Navigate replace to={"/attendance"} />} />
             <Route path="/attendance" element={<Attendance />} />
             <Route path="/sign-in" element={<Login />} />
+            <Route path="*" element={<PageNotFound />} />
           </Route>
           <Route
             path="/admin"

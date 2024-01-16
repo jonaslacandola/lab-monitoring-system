@@ -6,6 +6,7 @@ import InputContainer from "../../ui/InputContainer";
 import Input from "../../ui/Input";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
+import Select from "../../ui/Select";
 
 import { useCreateAdmin } from "./useCreateAdmin";
 
@@ -99,6 +100,16 @@ function CreateAdminForm() {
             validate: validateEmail,
           })}
         />
+      </InputContainer>
+      <InputContainer>
+        <span>Role</span>
+        <Select {...register("role", { required: true })}>
+          <option value="" hidden>
+            Select from options
+          </option>
+          <option value="administrator">Administrator</option>
+          <option value="instructor">Instructor</option>
+        </Select>
       </InputContainer>
       <InputContainer>
         <span>Password</span>

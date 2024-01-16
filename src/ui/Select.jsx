@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
 const Select = styled.select`
-  padding: 8px 1rem;
+  padding: 4px 1rem;
   background-color: var(--slate-50);
   border: 1px solid var(--slate-200);
-  border-radius: 8px;
+  border-radius: 4px;
   color: var(--slate-800);
-  font-size: 15px;
+  font-size: 14px;
 
   &:focus {
     outline-offset: 1px;

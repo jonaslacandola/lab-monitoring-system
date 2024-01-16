@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { HiOutlinePlus } from "react-icons/hi2";
 
 import { useLaboratories } from "../features/laboratories/useLaboratories";
+import { useUsersProvider } from "../features/users/UsersProvider";
 
 import LaboratoryCard from "../features/laboratories/LaboratoryCard";
 import PopOver from "../ui/PopOver";
@@ -10,6 +11,7 @@ import Modal from "../ui/Modal";
 import CreateLaboratoryForm from "../features/laboratories/CreateLaboratoryForm";
 import Menu from "../ui/Menu";
 import EmptyPage from "../ui/EmptyPage";
+import PageNotAvailable from "../ui/PageNotAvailable";
 
 const StyledLaboratories = styled.div`
   width: 100%;
@@ -26,44 +28,50 @@ const Container = styled.div`
 `;
 
 function Laboratories() {
+  const { user } = useUsersProvider();
   const { isLoadingLaboratories, laboratories } = useLaboratories();
 
-  return (
-    <>
-      {isLoadingLaboratories && <Spinner />}
-      <Modal>
-        <Container>
-          <h1>All laboratories</h1>
+  console.log(user.role);
+
+  if (user.role !== "administrator") return <PageNotAvailable />;
+
+  if (user.role === "administrator")
+    return (
+      <>
+        {isLoadingLaboratories && <Spinner />}
+        <Modal>
           <Container>
-            <Menu>
-              <Modal.Open window={"addLabForm"}>
-                <Menu.Button>
-                  <span>Add</span>
-                  <HiOutlinePlus />
-                </Menu.Button>
-              </Modal.Open>
-            </Menu>
+            <h1>All laboratories</h1>
+            <Container>
+              <Menu>
+                <Modal.Open window={"addLabForm"}>
+                  <Menu.Button>
+                    <span>Add</span>
+                    <HiOutlinePlus />
+                  </Menu.Button>
+                </Modal.Open>
+              </Menu>
+            </Container>
           </Container>
-        </Container>
-        {!isLoadingLaboratories && (
-          <PopOver>
-            <StyledLaboratories>
-              {!laboratories.length && <EmptyPage />}
-              {laboratories?.map((laboratory) => (
-                <LaboratoryCard
-                  key={laboratory.laboratoryId}
-                  laboratory={laboratory}
-                />
-              ))}
-            </StyledLaboratories>
-          </PopOver>
-        )}
-        <Modal.Window position={"right"} name={"addLabForm"}>
-          <CreateLaboratoryForm />
-        </Modal.Window>
-      </Modal>
-    </>
-  );
+          {!isLoadingLaboratories && (
+            <PopOver>
+              <StyledLaboratories>
+                {!laboratories.length && <EmptyPage />}
+                {laboratories?.map((laboratory) => (
+                  <LaboratoryCard
+                    key={laboratory.laboratoryId}
+                    laboratory={laboratory}
+                  />
+                ))}
+              </StyledLaboratories>
+            </PopOver>
+          )}
+          <Modal.Window position={"right"} name={"addLabForm"}>
+            <CreateLaboratoryForm />
+          </Modal.Window>
+        </Modal>
+      </>
+    );
 }
 
 export default Laboratories;

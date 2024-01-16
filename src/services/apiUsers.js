@@ -57,7 +57,7 @@ export function signOutUserAndSession() {
 
 export async function createAdminWithEmailAndPassword(admin) {
   const { adminEmail: email, adminPassword: password } = admin;
-  const { firstName, lastName, adminEmail, pfpURL } = admin;
+  const { firstName, lastName, adminEmail, pfpURL, role } = admin;
 
   const imageName = `${Math.random()}-${pfpURL.name}`.replace("/", "");
   const imagePath = `${supabaseUrl}/storage/v1/object/public/admins/${imageName}`;
@@ -76,6 +76,7 @@ export async function createAdminWithEmailAndPassword(admin) {
       lastName,
       adminEmail,
       pfpURL: imagePath,
+      role,
     },
   ]);
 

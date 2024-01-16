@@ -1,12 +1,12 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 const Input = styled.input`
-  padding: 8px 1rem;
+  padding: 6px 0.8rem;
   background-color: var(--slate-50);
   border: 1px solid var(--slate-200);
-  border-radius: 8px;
+  border-radius: 4px;
   color: var(--slate-800);
-  font-size: 15px;
+  font-size: 14px;
   flex-grow: 1;
 
   &:focus {

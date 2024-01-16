@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { formatTime } from "../data/formatTime";
 import { format } from "date-fns";
 import {
   CartesianGrid,
@@ -11,7 +10,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import MiniSpinner from "../ui/MiniSpinner";
 import Spinner from "../ui/Spinner";
@@ -21,6 +20,9 @@ import { useAttendancesByCurrentDate } from "../features/attendances/useAttendan
 import SearchBar from "../ui/Searchbar";
 import { useUpdateTimeOut } from "../features/attendances/useUpdateTimeOut";
 import toast from "react-hot-toast";
+import Time from "../features/Dashboard/Time";
+import TableBody from "../features/Dashboard/TableBody";
+import TableRow from "../features/Dashboard/TableRow";
 
 const Table = styled.div`
   background-color: white;
@@ -46,11 +48,6 @@ const DateAndTime = styled.span`
   color: var(--slate-600);
 `;
 
-const Body = styled.div`
-  overflow-y: scroll;
-  max-height: 12rem;
-`;
-
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -60,17 +57,6 @@ const Container = styled.div`
   & p {
     margin-top: 1rem;
     color: var(--slate-500);
-  }
-`;
-
-const Row = styled.div`
-  display: grid;
-  grid-template-columns: 0.5fr 1fr 0.8fr 0.6fr 0.6fr 0.5fr 0.5fr;
-  padding: 8px;
-  font-size: 15px;
-
-  & span {
-    color: var(--slate-700);
   }
 `;
 
@@ -125,8 +111,8 @@ function Dashboard() {
   const [filter, setFilter] = useState("");
   const [filteredAttendances, setFilteredAttendances] = useState([]);
   const { currentAttendances, isLoadingCurrentAttendances } =
-  useAttendancesByCurrentDate();
-  const {isUpdating, timeOut} = useUpdateTimeOut()
+    useAttendancesByCurrentDate();
+  const { isUpdating, timeOut } = useUpdateTimeOut();
 
   const currentDate = format(new Date(), "yyyy-MM-dd").replaceAll("-", "/");
 
@@ -141,25 +127,25 @@ function Dashboard() {
       .padStart(2, "0")}`;
 
     const timedOutAttendance = filteredAttendances
-    .filter((attendance) => attendance.timeOut === null)
-    .map((attendance) => (
-      {attendanceId: attendance.attendanceId, 
-        studentId: attendance.studentId, 
-        laboratoryId: attendance.laboratoryId, 
-        computerId: attendance.computerId, 
-        timeIn: attendance.timeIn, 
-        timeOut: currentTime, 
-        createdAt: attendance.createdAt}
-      ))
-    
+      .filter((attendance) => attendance.timeOut === null)
+      .map((attendance) => ({
+        attendanceId: attendance.attendanceId,
+        studentId: attendance.studentId,
+        laboratoryId: attendance.laboratoryId,
+        computerId: attendance.computerId,
+        timeIn: attendance.timeIn,
+        timeOut: currentTime,
+        createdAt: attendance.createdAt,
+      }));
+
     if (!timedOutAttendance.length) {
-      toast.error("All attendances are timed out.")
-     return;
+      toast.error("All attendances are timed out.");
+      return;
     }
 
-    timeOut({timedOutAttendance, currentDate})
-    setFilter("")
-    setFilteredAttendances([])
+    timeOut({ timedOutAttendance, currentDate });
+    setFilter("");
+    setFilteredAttendances([]);
   }
 
   function handleFilterChanged() {
@@ -171,15 +157,15 @@ function Dashboard() {
   }
 
   function handleQueryChanged(e) {
-    const {value: query} = e.target
+    const { value: query } = e.target;
 
     if (!query) {
-      setFilter("")
-      setFilteredAttendances([]) 
+      setFilter("");
+      setFilteredAttendances([]);
       return;
     }
 
-    setFilter(query)
+    setFilter(query);
   }
 
   return (
@@ -201,7 +187,10 @@ function Dashboard() {
               size={"small"}
               placeholder={"Filter attendance"}
             />
-            <TableButton onClick={handleTimeOutAll} disabled={!filteredAttendances.length}>
+            <TableButton
+              onClick={handleTimeOutAll}
+              disabled={!filteredAttendances.length}
+            >
               <span>Time out</span>
             </TableButton>
           </Container>
@@ -213,12 +202,18 @@ function Dashboard() {
           </Container>
         )}
 
-        {!isLoadingCurrentAttendances && <TableBody
-          data={filteredAttendances.length ? filteredAttendances : currentAttendances}
-          render={(attendance) => (
-            <TableRow key={attendance.attendanceId} attendance={attendance} />
-          )}
-        />}
+        {!isLoadingCurrentAttendances && (
+          <TableBody
+            data={
+              filteredAttendances.length
+                ? filteredAttendances
+                : currentAttendances
+            }
+            render={(attendance) => (
+              <TableRow key={attendance.attendanceId} attendance={attendance} />
+            )}
+          />
+        )}
       </Table>
       <GraphContainer>
         <Title>Weekly attendance</Title>
@@ -247,42 +242,4 @@ function Dashboard() {
   );
 }
 
-function TableBody({ data, render }) {
-
-  if (!data?.length) return <Container><p>There are not attendances today.</p></Container>
-
-  if (data?.length) return <Body>{data?.map(render)}</Body>;
-}
-
-function TableRow({ attendance }) {
-  const { students, computers, laboratories, timeIn, timeOut } = attendance;
-  const { studentId, studentName, yearAndSection } = students;
-
-  return (
-    <Row>
-      <span>{studentId}</span>
-      <span>{studentName}</span>
-      <span>{yearAndSection}</span>
-      {laboratories ? (
-        <span>{laboratories.laboratoryName}</span>
-      ) : (
-        <span>&mdash;</span>
-      )}
-      {computers ? <span>PC {computers.computer}</span> : <span>&mdash;</span>}
-      <span>{formatTime(timeIn)}</span>
-      <span>{timeOut ? formatTime(timeOut) : "--:-- --"}</span>
-    </Row>
-  );
-}
-
-function Time() {
-  const [currentTime, setCurrentTime] = useState(new Date());
-  useEffect(function () {
-    const intervalTime = setInterval(() => setCurrentTime(new Date()), 1000);
-
-    return () => clearInterval(intervalTime);
-  }, []);
-
-  return <DateAndTime>{formatTime(currentTime.toTimeString())}</DateAndTime>;
-}
 export default Dashboard;

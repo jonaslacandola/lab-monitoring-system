@@ -54,10 +54,23 @@ export async function getAttendancesByDate(currentDate) {
 }
 
 export async function updateAttendancesTimeOut(attendances, currentDate) {
-  const {error} = await supabase.from("attendances").upsert(attendances).eq("createdAt", currentDate)
+  const { error } = await supabase
+    .from("attendances")
+    .upsert(attendances)
+    .eq("createdAt", currentDate);
 
   if (error) {
-    console.error(error.message)
-    throw new Error("Unable to time out attendances.")
+    console.error(error.message);
+    throw new Error("Unable to time out attendances.");
+  }
+
+  const { error: computerError } = await supabase
+    .from("computers")
+    .update({ computerStatus: "available" })
+    .eq("computerStatus", "unavailable");
+
+  if (computerError) {
+    console.error(computerError.message);
+    throw new Error("Unable to update computers.");
   }
 }

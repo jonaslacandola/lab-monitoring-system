@@ -42,11 +42,11 @@ const StyledSearchbar = styled.div`
   ${(props) =>
     props.size === "small" &&
     css`
-      padding: 4px 1rem;
+      padding: 6px 1rem;
       & input {
         border: none;
         outline: none;
-        font-size: 15px;
+        font-size: 14px;
         color: var(--slate-800);
 
         &::placeholder {
@@ -63,7 +63,7 @@ const StyledSearchbar = styled.div`
 `;
 
 StyledSearchbar.defaultProps = {
-  size: "medium",
+  size: "small",
 };
 
 function Searchbar({ size, value, onChange, onQuery, placeholder }) {

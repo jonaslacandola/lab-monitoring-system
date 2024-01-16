@@ -2,10 +2,12 @@ import styled from "styled-components";
 import Input from "./Input";
 
 const FileInput = styled(Input).attrs({ type: "file" })`
+  font-size: 14px;
+
   &::file-selector-button {
     border: none;
     border-radius: 6px;
-    padding: 8px 16px;
+    padding: 4px 16px;
     color: white;
     font-weight: 500;
     background-color: var(--blue-500);

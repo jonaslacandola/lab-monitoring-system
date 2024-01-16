@@ -34,6 +34,7 @@ const Img = styled.img`
   width: 45px;
   border-radius: 100%;
   border: 1px solid var(--blue-500);
+  object-fit: cover;
 `;
 
 const Container = styled.div`
@@ -49,9 +50,10 @@ const TextContainer = styled.div`
   justify-content: center;
 `;
 
-const SubText = styled.p`
-  font-size: 12px;
-  color: var(--slate-400);
+const SubText = styled.span`
+  font-size: 13px;
+  color: var(--slate-500);
+  text-transform: capitalize;
 `;
 
 function AdminHeader() {
@@ -66,10 +68,10 @@ function AdminHeader() {
               <Container>
                 <Img src={user.pfpURL} />
                 <TextContainer>
-                  <p>
+                  <span>
                     {user?.firstName} {user?.lastName}
-                  </p>
-                  <SubText>{user.adminEmail}</SubText>
+                  </span>
+                  <SubText>{user.role}</SubText>
                 </TextContainer>
               </Container>
             </PopOver.Toggle>
