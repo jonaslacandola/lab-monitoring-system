@@ -11,7 +11,7 @@ export async function getComputersByLaboratoryId(laboratoryId) {
     throw new Error("Unable to retrieve computers information.");
   }
 
-  return data;
+  return data?.sort((a, b) => a.computer - b.computer);
 }
 
 export async function getAvailableComputers() {
@@ -25,7 +25,7 @@ export async function getAvailableComputers() {
     throw new Error("Unable to retrieve computers information.");
   }
 
-  return data;
+  return data?.sort((a, b) => a.computer - b.computer);
 }
 
 export async function updateComputerStatus(computerId, status) {

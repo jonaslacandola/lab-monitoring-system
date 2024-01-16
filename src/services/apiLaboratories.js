@@ -5,7 +5,7 @@ export async function getLaboratories() {
 
   if (error) throw new Error("Unable to retrieve laboratories information.");
 
-  return data;
+  return data?.sort((a, b) => a.laboratoryId - b.laboratoryId);
 }
 export async function getAvailableLaboratories() {
   const { data, error } = await supabase
