@@ -9,20 +9,20 @@ function Search() {
   const navigate = useNavigate();
 
   function handleQuery() {
-    setSearchParams({ studentId: query });
+    setSearchParams({ student: query });
   }
 
   function handleQueryChange(e) {
     const { value } = e.target;
     if (!value) {
-      navigate("/attendance");
+      navigate("/student/attendance");
     }
     setQuery(value);
   }
 
   return (
     <Searchbar
-      placeholder={"Search student Id"}
+      placeholder={"Search student"}
       value={query}
       onChange={handleQueryChange}
       onQuery={handleQuery}

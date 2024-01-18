@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { HiOutlineUser } from "react-icons/hi2";
+import { HiOutlineArrowRightOnRectangle } from "react-icons/hi2";
 import { useNavigate } from "react-router";
 
 import Button from "./Button";
@@ -22,14 +22,14 @@ const HeaderButton = styled(Button)`
 function Header() {
   const navigate = useNavigate();
 
-  function handleLogin() {
-    navigate("/sign-in", { replace: true });
+  function handleExit() {
+    navigate("/", { replace: true });
   }
 
   return (
     <StyledHeader>
-      <HeaderButton type="icon" onClick={handleLogin}>
-        <HiOutlineUser />
+      <HeaderButton type="icon" onClick={handleExit}>
+        <HiOutlineArrowRightOnRectangle />
       </HeaderButton>
     </StyledHeader>
   );

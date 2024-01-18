@@ -14,7 +14,7 @@ const StyledSidebar = styled.aside`
 function Sidebar() {
   return (
     <StyledSidebar>
-      <StyledNavLink to={"/attendance"} icon={<HiOutlineUserGroup />}>
+      <StyledNavLink to={"/student/attendance"} icon={<HiOutlineUserGroup />}>
         Attendance
       </StyledNavLink>
     </StyledSidebar>

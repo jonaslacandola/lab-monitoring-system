@@ -19,16 +19,19 @@ const Container = styled.div`
 
 function Attendance() {
   const [searchParams] = useSearchParams();
-  const studentId = searchParams.get("studentId");
+  const student = searchParams.get("student");
   const { currentAttendances } = useAttendancesByCurrentDate();
 
-  const filteredAttendances = currentAttendances?.filter(
-    (attendance) => attendance.studentId === studentId
-  );
+  const filteredAttendances = currentAttendances?.filter((attendance) => {
+    const { studentName } = attendance.students;
+    if (studentName?.toUpperCase().includes(student?.toUpperCase()))
+      return attendance;
+    else if (attendance.studentId === student) return attendance;
+  });
 
   useEffect(function () {
-    if (studentId && !filteredAttendances?.length)
-      toast.error("Unable to find student Id.");
+    if (student && !filteredAttendances?.length)
+      toast.error("Unable to find student.");
   });
 
   return (
