@@ -2,6 +2,7 @@ import styled from "styled-components";
 import StyledNavLink from "../../ui/StyledNavLink";
 import {
   HiOutlineBuildingOffice,
+  HiOutlineCalendarDays,
   HiOutlineSquare3Stack3D,
   HiOutlineTv,
   HiOutlineUserPlus,
@@ -21,6 +22,9 @@ function AdminSidebar() {
     <StyledSidebar>
       <StyledNavLink to={"/admin/dashboard"} icon={<HiOutlineSquare3Stack3D />}>
         Dashboard
+      </StyledNavLink>
+      <StyledNavLink to={"/admin/archive"} icon={<HiOutlineCalendarDays />}>
+        Archive
       </StyledNavLink>
       <StyledNavLink to={"/admin/computer"} icon={<HiOutlineTv />}>
         Computer

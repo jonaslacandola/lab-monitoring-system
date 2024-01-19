@@ -20,9 +20,9 @@ import { useAttendancesByCurrentDate } from "../features/attendances/useAttendan
 import SearchBar from "../ui/Searchbar";
 import { useUpdateTimeOut } from "../features/attendances/useUpdateTimeOut";
 import toast from "react-hot-toast";
-import Time from "../features/Dashboard/Time";
-import TableBody from "../features/Dashboard/TableBody";
-import TableRow from "../features/Dashboard/TableRow";
+import Time from "../features/dashboard/Time";
+import TableBody from "../features/dashboard/TableBody";
+import TableRow from "../features/dashboard/TableRow";
 
 const Table = styled.div`
   background-color: white;

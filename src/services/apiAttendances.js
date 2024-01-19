@@ -50,16 +50,6 @@ export async function updateAttendancesTimeOut(attendances, currentDate) {
     console.error(error.message);
     throw new Error("Unable to time out attendances.");
   }
-
-  // const { error: computerError } = await supabase
-  //   .from("computers")
-  //   .update({ computerStatus: "available" })
-  //   .eq("computerStatus", "unavailable");
-
-  // if (computerError) {
-  //   console.error(computerError.message);
-  //   throw new Error("Unable to update computers.");
-  // }
 }
 
 export async function updateTimeOutSpecific(attendance) {

@@ -43,6 +43,9 @@ function HomePage() {
         <span>Student</span>
       </Button>
       <Button onClick={handleSignInAdmin}>
+        <span>Instructor</span>
+      </Button>
+      <Button onClick={handleSignInAdmin}>
         <span>Administrator</span>
       </Button>
     </StyledHomePage>

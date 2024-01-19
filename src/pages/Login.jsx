@@ -21,8 +21,13 @@ const StyledForm = styled.form`
     width: 35%;
   }
 
-  & h1 {
+  & h1,
+  & p {
     text-align: center;
+  }
+
+  & p {
+    color: var(--slate-600);
     margin-bottom: 1rem;
   }
 `;
@@ -68,6 +73,7 @@ function Login() {
     return (
       <StyledForm onSubmit={handleSubmit(onSubmit)}>
         <h1>Laboratory Monitoring System</h1>
+        <p>Sign in your account</p>
         <Container>
           <InputContainer>
             <label>Email</label>

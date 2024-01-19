@@ -16,6 +16,7 @@ import AdminAppLayout from "./features/users/AdminAppLayout";
 
 import GlobalStyles from "./styles/GlobalStyles";
 import HomePage from "./pages/HomePage";
+import Archive from "./pages/Archive";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,7 @@ function App() {
           >
             <Route index element={<Navigate replace to="/admin/dashboard" />} />
             <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route path="/admin/archive" element={<Archive />} />
             <Route path="/admin/computer" element={<Computers />} />
             <Route path="/admin/laboratory" element={<Laboratories />} />
             <Route path="/admin/register" element={<Admin />} />
