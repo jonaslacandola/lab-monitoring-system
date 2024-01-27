@@ -64,7 +64,8 @@ function PopOver({ children }) {
 function Toggle({ Id, children }) {
   const { openId, open, close } = useContext(PopOverContext);
 
-  function handleToggle() {
+  function handleToggle(e) {
+    e.stopPropagation();
     openId === "" || openId !== Id ? open(Id) : close();
   }
 
@@ -91,7 +92,7 @@ function Window({ children, Id }) {
   const { openId, close } = useContext(PopOverContext);
   const ref = useRef();
 
-  useOutsideClick(ref, close);
+  useOutsideClick(ref, close, false);
 
   if (openId !== Id) return;
 

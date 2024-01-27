@@ -2,12 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import UsersProvider from "./features/users/UsersProvider.jsx";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "./ui/ErrorFallback.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <UsersProvider>
-      <App />
-    </UsersProvider>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <UsersProvider>
+        <App />
+      </UsersProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
 

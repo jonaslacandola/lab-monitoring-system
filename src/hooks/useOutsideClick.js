@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export function useOutsideClick(refElement, handleClickOutside) {
+export function useOutsideClick(refElement, handleClickOutside, bubble = true) {
   useEffect(
     function () {
       function handleClick(e) {
@@ -9,10 +9,10 @@ export function useOutsideClick(refElement, handleClickOutside) {
         }
       }
 
-      document.addEventListener("click", handleClick, true);
+      document.addEventListener("click", handleClick, bubble);
 
       return () => document.removeEventListener("click", handleClick);
     },
-    [refElement, handleClickOutside]
+    [refElement, handleClickOutside, bubble]
   );
 }
