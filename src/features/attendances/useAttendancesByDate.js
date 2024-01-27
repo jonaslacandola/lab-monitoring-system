@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { getAttendancesByDate } from "../../services/apiAttendances";
 
 export function useAttendancesByDate() {
-  const { isPending: isLoadingAttendances, mutate: getAttendances } =
+  const { isLoading: isLoadingAttendances, mutate: getAttendances } =
     useMutation({
       mutationFn: getAttendancesByDate,
       onError: (error) => {

@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 export function useTimeOutSpecific() {
   const queryClient = useQueryClient();
-  const { isPending: isTimingOut, mutate: timeOutSpecific } = useMutation({
+  const { isLoading: isTimingOut, mutate: timeOutSpecific } = useMutation({
     mutationFn: updateTimeOutSpecific,
     onSuccess: () => {
       toast.success("Attendance has been timed out successfully.");

@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 export function useCreateLaboratory() {
   const queryClient = useQueryClient();
 
-  const { isPending: isCreating, mutate: create } = useMutation({
+  const { isLoading: isCreating, mutate: create } = useMutation({
     mutationFn: createNewLaboratory,
     onSuccess: () => {
       toast.success("Laboratory has been successfuly added.");

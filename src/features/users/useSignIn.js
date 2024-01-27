@@ -11,7 +11,7 @@ export function useSignIn() {
   const navigate = useNavigate();
 
   const {
-    isPending: isSigningIn,
+    isLoading: isSigningIn,
     mutate: signIn,
     error: signInError,
   } = useMutation({

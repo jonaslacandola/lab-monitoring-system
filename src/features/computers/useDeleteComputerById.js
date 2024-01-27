@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 export function useDeleteComputerById() {
   const queryClient = useQueryClient();
-  const { isPending: isDeletingComputer, mutate: deleteComputer } = useMutation(
+  const { isLoading: isDeletingComputer, mutate: deleteComputer } = useMutation(
     {
       mutationFn: ({ computerId, laboratories }) =>
         deleteComputerById(computerId, laboratories),

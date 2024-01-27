@@ -8,7 +8,7 @@ import { useNavigate } from "react-router";
 export function useCurrentSession() {
   const navigate = useNavigate();
   const { dispatch } = useUsersProvider();
-  const { isPending: isFetchingSession, mutate: signIn } = useMutation({
+  const { isLoading: isFetchingSession, mutate: signIn } = useMutation({
     mutationFn: getUserSession,
     onSuccess: (data) => {
       dispatch(signedIn(data.at(0)));

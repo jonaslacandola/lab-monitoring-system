@@ -3,7 +3,7 @@ import { createStudentAttendance } from "../../services/apiAttendances";
 import toast from "react-hot-toast";
 
 export function useCreateAttendance() {
-  const { isPending: isCreating, mutate: createAttendance } = useMutation({
+  const { isLoading: isCreating, mutate: createAttendance } = useMutation({
     mutationFn: createStudentAttendance,
     onSuccess: () => {
       toast.success("Attendance successfully recorded.");

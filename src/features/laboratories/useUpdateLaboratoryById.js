@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 export function useUpdateLaboratoryById() {
   const queryClient = useQueryClient();
-  const { isPending: isUpdating, mutate: update } = useMutation({
+  const { isLoading: isUpdating, mutate: update } = useMutation({
     mutationFn: updateLaboratoryById,
     onSuccess: () => {
       toast.success("Laboratory has been successfully updated.");

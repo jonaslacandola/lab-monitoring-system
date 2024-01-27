@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 export function useUpdateSpecificComputer() {
   const queryClient = useQueryClient();
-  const { isPending: isUpdating, mutate: update } = useMutation({
+  const { isLoading: isUpdating, mutate: update } = useMutation({
     mutationFn: updateComputer,
     onSuccess: () => {
       toast.success("Computer has been successfully updated.");

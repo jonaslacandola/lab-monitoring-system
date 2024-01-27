@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 export function useCreateComputer() {
   const queryClient = useQueryClient();
-  const { isPending: isCreating, mutate: create } = useMutation({
+  const { isLoading: isCreating, mutate: create } = useMutation({
     mutationFn: createComputer,
     onSuccess: () => {
       toast.success("Computer has been successfully added.");

@@ -9,7 +9,7 @@ export function useCreateAdmin() {
   const { dispatch } = useUsersProvider();
   const navigate = useNavigate();
 
-  const { isPending: isCreating, mutate: create } = useMutation({
+  const { isLoading: isCreating, mutate: create } = useMutation({
     mutationFn: createAdminWithEmailAndPassword,
     onSuccess: () => {
       toast.success(
